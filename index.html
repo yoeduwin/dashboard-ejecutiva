@@ -224,40 +224,6 @@
             background: #f8f9fa;
         }
 
-        .status-badge {
-            display: inline-block;
-            padding: 0.25rem 0.6rem;
-            border-radius: 15px;
-            font-size: 0.75rem;
-            font-weight: 600;
-            white-space: nowrap;
-        }
-
-        .status-entregado {
-            background: #d4edda;
-            color: #155724;
-        }
-
-        .status-tiempo {
-            background: #d1ecf1;
-            color: #0c5460;
-        }
-
-        .status-limite {
-            background: #fff3cd;
-            color: #856404;
-        }
-
-        .status-alerta, .status-vencido {
-            background: #f8d7da;
-            color: #721c24;
-        }
-
-        .status-pendiente {
-            background: #e2e3e5;
-            color: #383d41;
-        }
-
         canvas {
             max-height: 220px !important;
         }
@@ -342,7 +308,7 @@
             <div class="kpi-card">
                 <div class="kpi-label">🔴 Vencidas</div>
                 <div class="kpi-value" id="kpi-vencidas" style="color: #e74c3c;">0</div>
-                <div class="kpi-subtitle">Fecha pasada</div>
+                <div class="kpi-subtitle">Fuera de tiempo</div>
             </div>
             <div class="kpi-card">
                 <div class="kpi-label">⏱️ Tiempo Promedio</div>
@@ -408,7 +374,7 @@
                 <canvas id="chartMes"></canvas>
             </div>
             <div class="chart-card">
-                <h3>Tiempo de Entrega por OT</h3>
+                <h3>Tiempo de Entrega (Días)</h3>
                 <canvas id="chartTiempos"></canvas>
             </div>
         </div>
@@ -464,19 +430,20 @@
                 const csvText = await response.text();
                 const rows = parseCSV(csvText);
                 
+                // Headers en fila 0, datos desde fila 1
                 allData = rows.slice(1).map(row => ({
-                    ot: row[1] || '',
-                    referencia: row[2] || '',
-                    clienteInicial: row[3] || '',
-                    clienteFinal: row[4] || '',
-                    nom: row[5] || '',
-                    proveedor: row[6] || '',
-                    personal: row[7] || '',
-                    fechaVisita: row[13] || '',
-                    fechaDigital: row[14] || '',
-                    fechaFisico: row[15] || '',
-                    checkboxEntregado: row[16] || '',
-                    estatusCalculado: row[17] || '',
+                    ot: row[1] || '',                    // B
+                    referencia: row[2] || '',            // C
+                    clienteInicial: row[3] || '',        // D
+                    clienteFinal: row[4] || '',          // E
+                    nom: row[5] || '',                   // F
+                    proveedor: row[6] || '',             // G
+                    personal: row[7] || '',              // H
+                    fechaVisita: row[8] || '',           // I (índice 8)
+                    fechaDigital: row[13] || '',         // N (índice 13)
+                    fechaFisico: row[14] || '',          // O (índice 14)
+                    estatusAuto: row[15] || '',          // P (índice 15) - Estatus automático con emojis
+                    entregadoManual: row[16] || '',      // Q (índice 16) - "ENTREGADO" manual
                     rawRow: row
                 })).filter(row => row.ot); // Filtrar filas vacías
 
@@ -490,7 +457,7 @@
                 document.getElementById('lastUpdate').textContent = new Date().toLocaleString('es-MX');
             } catch (error) {
                 console.error('Error cargando datos:', error);
-                alert('Error al cargar los datos. Verifica la URL del CSV.');
+                alert('Error al cargar los datos. Verifica la conexión.');
             }
         }
 
@@ -533,8 +500,9 @@
             return rows;
         }
 
+        // Lee el estatus de la columna P (estatusAuto)
         function getStatusCategory(row) {
-            const estatus = row.estatusCalculado;
+            const estatus = row.estatusAuto;
             if (estatus.includes('Entregado') || estatus.includes('✅')) return 'ENTREGADO';
             if (estatus.includes('Alerta') || estatus.includes('🔴')) return 'ALERTA';
             if (estatus.includes('límite') || estatus.includes('🟠')) return 'LIMITE';
@@ -550,6 +518,7 @@
             return new Date(parts[2], parts[1] - 1, parts[0]);
         }
 
+        // Calcula días reales de entrega: Fecha Físico - Fecha Visita
         function calcularDiasEntrega(row) {
             const fechaInicio = parseFecha(row.fechaVisita);
             const fechaFin = parseFecha(row.fechaFisico);
@@ -560,16 +529,16 @@
 
         function updateKPIs() {
             const total = filteredData.length;
-            const entregadas = filteredData.filter(r => getStatusCategory(r) === 'ENTREGADO').length;
+            const entregadas = filteredData.filter(r => r.entregadoManual.toUpperCase().includes('ENTREGADO')).length;
             const tiempo = filteredData.filter(r => getStatusCategory(r) === 'TIEMPO').length;
             const limite = filteredData.filter(r => getStatusCategory(r) === 'LIMITE').length;
             const vencidas = filteredData.filter(r => getStatusCategory(r) === 'ALERTA').length;
 
-            // Calcular tiempo promedio de entrega (solo entregadas)
+            // Calcular tiempo promedio de entrega (solo entregadas con fechas válidas)
             const entregadasConDias = filteredData
-                .filter(r => getStatusCategory(r) === 'ENTREGADO')
+                .filter(r => r.entregadoManual.toUpperCase().includes('ENTREGADO'))
                 .map(r => calcularDiasEntrega(r))
-                .filter(d => d !== null);
+                .filter(d => d !== null && d > 0);
             
             const promedio = entregadasConDias.length > 0 
                 ? Math.round(entregadasConDias.reduce((a, b) => a + b, 0) / entregadasConDias.length)
@@ -646,7 +615,7 @@
         }
 
         function updateStatusChart() {
-            const entregadas = filteredData.filter(r => getStatusCategory(r) === 'ENTREGADO').length;
+            const entregadas = filteredData.filter(r => r.entregadoManual.toUpperCase().includes('ENTREGADO')).length;
             const tiempo = filteredData.filter(r => getStatusCategory(r) === 'TIEMPO').length;
             const limite = filteredData.filter(r => getStatusCategory(r) === 'LIMITE').length;
             const alerta = filteredData.filter(r => getStatusCategory(r) === 'ALERTA').length;
@@ -687,8 +656,10 @@
             });
 
             const sortedMeses = Object.entries(mesesCount).sort((a, b) => {
-                const dateA = new Date(a[0]);
-                const dateB = new Date(b[0]);
+                const [mesA, yearA] = a[0].split(' ');
+                const [mesB, yearB] = b[0].split(' ');
+                const dateA = new Date(yearA, getMesIndex(mesA));
+                const dateB = new Date(yearB, getMesIndex(mesB));
                 return dateA - dateB;
             });
 
@@ -723,15 +694,21 @@
             });
         }
 
+        function getMesIndex(mes) {
+            const meses = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'];
+            return meses.indexOf(mes.toLowerCase().substring(0, 3));
+        }
+
         function updateTiemposChart() {
             const otsConTiempos = filteredData
-                .filter(r => getStatusCategory(r) === 'ENTREGADO')
+                .filter(r => r.entregadoManual.toUpperCase().includes('ENTREGADO'))
                 .map(r => ({
                     ot: r.ot,
                     dias: calcularDiasEntrega(r)
                 }))
-                .filter(d => d.dias !== null)
-                .slice(0, 15); // Solo últimas 15
+                .filter(d => d.dias !== null && d.dias > 0)
+                .sort((a, b) => b.dias - a.dias)
+                .slice(0, 15);
 
             if (charts.tiempos) charts.tiempos.destroy();
 
@@ -771,8 +748,6 @@
 
             filteredData.forEach(row => {
                 const tr = document.createElement('tr');
-                const status = getStatusCategory(row);
-                const statusClass = `status-${status.toLowerCase()}`;
                 const dias = calcularDiasEntrega(row);
                 
                 tr.innerHTML = `
@@ -786,7 +761,7 @@
                     <td>${row.fechaDigital}</td>
                     <td>${row.fechaFisico}</td>
                     <td>${dias !== null ? dias : '-'}</td>
-                    <td><span class="status-badge ${statusClass}">${row.estatusCalculado}</span></td>
+                    <td>${row.estatusAuto}</td>
                 `;
                 tbody.appendChild(tr);
             });
@@ -805,7 +780,7 @@
                 sortAscending = true;
             }
 
-            const keys = ['ot', 'referencia', 'clienteInicial', 'clienteFinal', 'nom', 'personal', 'fechaVisita', 'fechaDigital', 'fechaFisico', 'dias', 'estatusCalculado'];
+            const keys = ['ot', 'referencia', 'clienteInicial', 'clienteFinal', 'nom', 'personal', 'fechaVisita', 'fechaDigital', 'fechaFisico', 'dias', 'estatusAuto'];
             const key = keys[column];
 
             filteredData.sort((a, b) => {
@@ -834,7 +809,7 @@
             const headers = ['OT', 'Referencia', 'Cliente Inicial', 'Cliente Final', 'NOM', 'Personal', 'F. Visita', 'F. Digital', 'F. Físico', 'Días', 'Estatus'];
             const rows = filteredData.map(row => [
                 row.ot, row.referencia, row.clienteInicial, row.clienteFinal, row.nom, row.personal,
-                row.fechaVisita, row.fechaDigital, row.fechaFisico, calcularDiasEntrega(row) || '', row.estatusCalculado
+                row.fechaVisita, row.fechaDigital, row.fechaFisico, calcularDiasEntrega(row) || '', row.estatusAuto
             ]);
 
             const csv = [headers, ...rows].map(row => 
