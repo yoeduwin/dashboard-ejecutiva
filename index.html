@@ -21,12 +21,12 @@
         .header {
             background: linear-gradient(135deg, #2d5f4f 0%, #3d7f6a 100%);
             color: white;
-            padding: 1.5rem 2rem;
+            padding: 1rem 2rem;
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
 
         .header h1 {
-            font-size: 1.8rem;
+            font-size: 1.5rem;
             font-weight: 600;
             margin-bottom: 0.5rem;
         }
@@ -35,17 +35,17 @@
             display: flex;
             gap: 1rem;
             align-items: center;
-            margin-top: 1rem;
+            margin-top: 0.5rem;
         }
 
         .btn {
             background: rgba(255,255,255,0.2);
             border: 1px solid rgba(255,255,255,0.3);
             color: white;
-            padding: 0.5rem 1rem;
+            padding: 0.4rem 0.8rem;
             border-radius: 6px;
             cursor: pointer;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             transition: all 0.3s;
         }
 
@@ -54,69 +54,69 @@
         }
 
         .container {
-            max-width: 1400px;
+            max-width: 1600px;
             margin: 0 auto;
-            padding: 2rem;
+            padding: 1.5rem;
         }
 
         .kpi-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 2rem;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
         }
 
         .kpi-card {
             background: white;
-            padding: 1.5rem;
-            border-radius: 12px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            padding: 1rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.08);
             transition: transform 0.3s, box-shadow 0.3s;
         }
 
         .kpi-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.12);
         }
 
         .kpi-label {
-            font-size: 0.85rem;
+            font-size: 0.75rem;
             color: #7f8c8d;
             text-transform: uppercase;
             letter-spacing: 0.5px;
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.3rem;
         }
 
         .kpi-value {
-            font-size: 2.5rem;
+            font-size: 2rem;
             font-weight: 700;
             color: #2d5f4f;
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.2rem;
         }
 
         .kpi-subtitle {
-            font-size: 0.9rem;
+            font-size: 0.8rem;
             color: #95a5a6;
         }
 
         .filters {
             background: white;
-            padding: 1.5rem;
-            border-radius: 12px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-            margin-bottom: 2rem;
+            padding: 1rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+            margin-bottom: 1.5rem;
         }
 
         .filters h3 {
-            margin-bottom: 1rem;
+            margin-bottom: 0.8rem;
             color: #2d5f4f;
-            font-size: 1.1rem;
+            font-size: 1rem;
         }
 
         .filter-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1rem;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 0.8rem;
         }
 
         .filter-group {
@@ -125,18 +125,18 @@
         }
 
         .filter-group label {
-            font-size: 0.85rem;
+            font-size: 0.75rem;
             color: #7f8c8d;
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.3rem;
             font-weight: 500;
         }
 
         .filter-group select,
         .filter-group input {
-            padding: 0.6rem;
+            padding: 0.5rem;
             border: 1px solid #dfe6e9;
             border-radius: 6px;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             transition: border-color 0.3s;
         }
 
@@ -148,43 +148,45 @@
 
         .charts-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 2rem;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin-bottom: 1.5rem;
         }
 
         .chart-card {
             background: white;
-            padding: 1.5rem;
-            border-radius: 12px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            padding: 1rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.08);
         }
 
         .chart-card h3 {
-            margin-bottom: 1rem;
+            margin-bottom: 0.8rem;
             color: #2d5f4f;
-            font-size: 1.1rem;
+            font-size: 0.95rem;
         }
 
         .table-container {
             background: white;
-            border-radius: 12px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            border-radius: 8px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.08);
             overflow: hidden;
         }
 
         .table-header {
-            padding: 1.5rem;
+            padding: 1rem;
             border-bottom: 1px solid #ecf0f1;
         }
 
         .table-header h3 {
             color: #2d5f4f;
-            font-size: 1.1rem;
+            font-size: 1rem;
         }
 
         .table-wrapper {
             overflow-x: auto;
+            max-height: 600px;
+            overflow-y: auto;
         }
 
         table {
@@ -194,17 +196,18 @@
 
         th {
             background: #f8f9fa;
-            padding: 1rem;
+            padding: 0.8rem;
             text-align: left;
             font-weight: 600;
             color: #2c3e50;
-            font-size: 0.85rem;
+            font-size: 0.75rem;
             text-transform: uppercase;
             letter-spacing: 0.5px;
             position: sticky;
             top: 0;
             cursor: pointer;
             user-select: none;
+            z-index: 10;
         }
 
         th:hover {
@@ -212,9 +215,9 @@
         }
 
         td {
-            padding: 1rem;
+            padding: 0.8rem;
             border-bottom: 1px solid #ecf0f1;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
         }
 
         tr:hover {
@@ -223,10 +226,11 @@
 
         .status-badge {
             display: inline-block;
-            padding: 0.3rem 0.8rem;
-            border-radius: 20px;
-            font-size: 0.8rem;
+            padding: 0.25rem 0.6rem;
+            border-radius: 15px;
+            font-size: 0.75rem;
             font-weight: 600;
+            white-space: nowrap;
         }
 
         .status-entregado {
@@ -234,28 +238,33 @@
             color: #155724;
         }
 
-        .status-pendiente {
+        .status-tiempo {
+            background: #d1ecf1;
+            color: #0c5460;
+        }
+
+        .status-limite {
             background: #fff3cd;
             color: #856404;
         }
 
-        .status-vencido {
+        .status-alerta, .status-vencido {
             background: #f8d7da;
             color: #721c24;
         }
 
-        .status-proximo {
-            background: #fff3cd;
-            color: #856404;
+        .status-pendiente {
+            background: #e2e3e5;
+            color: #383d41;
         }
 
         canvas {
-            max-height: 300px;
+            max-height: 220px !important;
         }
 
         .loading {
             text-align: center;
-            padding: 3rem;
+            padding: 2rem;
             color: #7f8c8d;
         }
 
@@ -274,17 +283,19 @@
             100% { transform: rotate(360deg); }
         }
 
+        @media (max-width: 1200px) {
+            .charts-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
         @media (max-width: 768px) {
             .container {
                 padding: 1rem;
             }
 
             .kpi-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .charts-grid {
-                grid-template-columns: 1fr;
+                grid-template-columns: repeat(2, 1fr);
             }
 
             .filter-grid {
@@ -299,7 +310,7 @@
         <div class="header-actions">
             <button class="btn" onclick="loadData()">🔄 Actualizar Datos</button>
             <button class="btn" onclick="exportToCSV()">📥 Exportar CSV</button>
-            <span style="font-size: 0.9rem; margin-left: auto;">
+            <span style="font-size: 0.85rem; margin-left: auto;">
                 Última actualización: <span id="lastUpdate">--</span>
             </span>
         </div>
@@ -314,24 +325,29 @@
                 <div class="kpi-subtitle">Órdenes de Trabajo</div>
             </div>
             <div class="kpi-card">
-                <div class="kpi-label">Entregadas</div>
+                <div class="kpi-label">✅ Entregadas</div>
                 <div class="kpi-value" id="kpi-entregadas" style="color: #27ae60;">0</div>
                 <div class="kpi-subtitle"><span id="kpi-entregadas-pct">0%</span> del total</div>
             </div>
             <div class="kpi-card">
-                <div class="kpi-label">Pendientes</div>
-                <div class="kpi-value" id="kpi-pendientes" style="color: #f39c12;">0</div>
-                <div class="kpi-subtitle"><span id="kpi-pendientes-pct">0%</span> del total</div>
+                <div class="kpi-label">🟢 En Tiempo</div>
+                <div class="kpi-value" id="kpi-tiempo" style="color: #27ae60;">0</div>
+                <div class="kpi-subtitle">Sin retraso</div>
             </div>
             <div class="kpi-card">
-                <div class="kpi-label">Próximas a Vencer</div>
-                <div class="kpi-value" id="kpi-proximas" style="color: #e67e22;">0</div>
-                <div class="kpi-subtitle">En 7 días o menos</div>
+                <div class="kpi-label">🟠 En Límite</div>
+                <div class="kpi-value" id="kpi-limite" style="color: #e67e22;">0</div>
+                <div class="kpi-subtitle">Menos de 1 día</div>
             </div>
             <div class="kpi-card">
-                <div class="kpi-label">Vencidas</div>
+                <div class="kpi-label">🔴 Vencidas</div>
                 <div class="kpi-value" id="kpi-vencidas" style="color: #e74c3c;">0</div>
-                <div class="kpi-subtitle">Fecha límite pasada</div>
+                <div class="kpi-subtitle">Fecha pasada</div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-label">⏱️ Tiempo Promedio</div>
+                <div class="kpi-value" id="kpi-promedio" style="color: #3498db;">0</div>
+                <div class="kpi-subtitle">Días de entrega</div>
             </div>
         </div>
 
@@ -371,10 +387,11 @@
                     <label>Estatus</label>
                     <select id="filter-estatus">
                         <option value="">Todos</option>
-                        <option value="ENTREGADO">Entregado</option>
-                        <option value="PENDIENTE">Pendiente</option>
-                        <option value="VENCIDO">Vencido</option>
-                        <option value="PROXIMO">Próximo a vencer</option>
+                        <option value="ENTREGADO">✅ Entregado</option>
+                        <option value="TIEMPO">🟢 En tiempo</option>
+                        <option value="LIMITE">🟠 En límite</option>
+                        <option value="ALERTA">🔴 Alerta</option>
+                        <option value="PENDIENTE">🟡 Pendiente</option>
                     </select>
                 </div>
             </div>
@@ -387,23 +404,19 @@
                 <canvas id="chartStatus"></canvas>
             </div>
             <div class="chart-card">
-                <h3>OTs por NOM</h3>
-                <canvas id="chartNOM"></canvas>
+                <h3>OTs por Mes de Registro</h3>
+                <canvas id="chartMes"></canvas>
             </div>
             <div class="chart-card">
-                <h3>Top 10 Clientes</h3>
-                <canvas id="chartClientes"></canvas>
-            </div>
-            <div class="chart-card">
-                <h3>Por Personal Ejecutiva</h3>
-                <canvas id="chartPersonal"></canvas>
+                <h3>Tiempo de Entrega por OT</h3>
+                <canvas id="chartTiempos"></canvas>
             </div>
         </div>
 
         <!-- Tabla -->
         <div class="table-container">
             <div class="table-header">
-                <h3>📋 Órdenes de Trabajo</h3>
+                <h3>📋 Órdenes de Trabajo (<span id="table-count">0</span> registros)</h3>
             </div>
             <div class="table-wrapper">
                 <table id="dataTable">
@@ -418,12 +431,13 @@
                             <th onclick="sortTable(6)">F. Visita</th>
                             <th onclick="sortTable(7)">F. Digital</th>
                             <th onclick="sortTable(8)">F. Físico</th>
-                            <th onclick="sortTable(9)">Estatus</th>
+                            <th onclick="sortTable(9)">Días</th>
+                            <th onclick="sortTable(10)">Estatus</th>
                         </tr>
                     </thead>
                     <tbody id="tableBody">
                         <tr>
-                            <td colspan="10">
+                            <td colspan="11">
                                 <div class="loading">
                                     <div class="spinner"></div>
                                     Cargando datos...
@@ -438,22 +452,18 @@
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <script>
-        // URL del CSV publicado (modifica el ID según tu Sheet)
         const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTl2L2xQjqks4NnlPYq5VqvVt1EXcrP8I3qujcAXtsWeZKJsNb6j2prwu6lW5zGLm5Gj-O3AG5aOReZ/pub?output=csv&gid=0';
         
         let allData = [];
         let filteredData = [];
         let charts = {};
 
-        // Cargar datos
         async function loadData() {
             try {
                 const response = await fetch(CSV_URL);
                 const csvText = await response.text();
                 const rows = parseCSV(csvText);
                 
-                // Remover encabezado
-                const headers = rows[0];
                 allData = rows.slice(1).map(row => ({
                     ot: row[1] || '',
                     referencia: row[2] || '',
@@ -465,9 +475,10 @@
                     fechaVisita: row[13] || '',
                     fechaDigital: row[14] || '',
                     fechaFisico: row[15] || '',
-                    estatus: row[17] || '',
+                    checkboxEntregado: row[16] || '',
+                    estatusCalculado: row[17] || '',
                     rawRow: row
-                }));
+                })).filter(row => row.ot); // Filtrar filas vacías
 
                 filteredData = [...allData];
                 
@@ -483,7 +494,6 @@
             }
         }
 
-        // Parser CSV simple
         function parseCSV(text) {
             const rows = [];
             let currentRow = [];
@@ -523,25 +533,16 @@
             return rows;
         }
 
-        // Calcular estatus real
         function getStatusCategory(row) {
-            const estatusText = row.estatus.toUpperCase();
-            if (estatusText.includes('ENTREGADO')) return 'ENTREGADO';
-            
-            const fechaFisico = parseFecha(row.fechaFisico);
-            const hoy = new Date();
-            hoy.setHours(0, 0, 0, 0);
-            
-            if (fechaFisico) {
-                const diffDays = Math.ceil((fechaFisico - hoy) / (1000 * 60 * 60 * 24));
-                if (diffDays < 0) return 'VENCIDO';
-                if (diffDays <= 7) return 'PROXIMO';
-            }
-            
+            const estatus = row.estatusCalculado;
+            if (estatus.includes('Entregado') || estatus.includes('✅')) return 'ENTREGADO';
+            if (estatus.includes('Alerta') || estatus.includes('🔴')) return 'ALERTA';
+            if (estatus.includes('límite') || estatus.includes('🟠')) return 'LIMITE';
+            if (estatus.includes('tiempo') || estatus.includes('🟢')) return 'TIEMPO';
+            if (estatus.includes('Pendiente') || estatus.includes('🟡')) return 'PENDIENTE';
             return 'PENDIENTE';
         }
 
-        // Parsear fecha
         function parseFecha(fechaStr) {
             if (!fechaStr) return null;
             const parts = fechaStr.split('/');
@@ -549,24 +550,40 @@
             return new Date(parts[2], parts[1] - 1, parts[0]);
         }
 
-        // Actualizar KPIs
+        function calcularDiasEntrega(row) {
+            const fechaInicio = parseFecha(row.fechaVisita);
+            const fechaFin = parseFecha(row.fechaFisico);
+            if (!fechaInicio || !fechaFin) return null;
+            const diff = Math.ceil((fechaFin - fechaInicio) / (1000 * 60 * 60 * 24));
+            return diff;
+        }
+
         function updateKPIs() {
             const total = filteredData.length;
             const entregadas = filteredData.filter(r => getStatusCategory(r) === 'ENTREGADO').length;
-            const vencidas = filteredData.filter(r => getStatusCategory(r) === 'VENCIDO').length;
-            const proximas = filteredData.filter(r => getStatusCategory(r) === 'PROXIMO').length;
-            const pendientes = total - entregadas - vencidas;
+            const tiempo = filteredData.filter(r => getStatusCategory(r) === 'TIEMPO').length;
+            const limite = filteredData.filter(r => getStatusCategory(r) === 'LIMITE').length;
+            const vencidas = filteredData.filter(r => getStatusCategory(r) === 'ALERTA').length;
+
+            // Calcular tiempo promedio de entrega (solo entregadas)
+            const entregadasConDias = filteredData
+                .filter(r => getStatusCategory(r) === 'ENTREGADO')
+                .map(r => calcularDiasEntrega(r))
+                .filter(d => d !== null);
+            
+            const promedio = entregadasConDias.length > 0 
+                ? Math.round(entregadasConDias.reduce((a, b) => a + b, 0) / entregadasConDias.length)
+                : 0;
 
             document.getElementById('kpi-total').textContent = total;
             document.getElementById('kpi-entregadas').textContent = entregadas;
             document.getElementById('kpi-entregadas-pct').textContent = `${total ? Math.round(entregadas/total*100) : 0}%`;
-            document.getElementById('kpi-pendientes').textContent = pendientes;
-            document.getElementById('kpi-pendientes-pct').textContent = `${total ? Math.round(pendientes/total*100) : 0}%`;
-            document.getElementById('kpi-proximas').textContent = proximas;
+            document.getElementById('kpi-tiempo').textContent = tiempo;
+            document.getElementById('kpi-limite').textContent = limite;
             document.getElementById('kpi-vencidas').textContent = vencidas;
+            document.getElementById('kpi-promedio').textContent = promedio;
         }
 
-        // Actualizar filtros
         function updateFilters() {
             const clientesIniciales = [...new Set(allData.map(r => r.clienteInicial))].filter(Boolean).sort();
             const clientesFinales = [...new Set(allData.map(r => r.clienteFinal))].filter(Boolean).sort();
@@ -592,7 +609,6 @@
             select.value = currentValue;
         }
 
-        // Aplicar filtros
         function applyFilters() {
             const filterOT = document.getElementById('filter-ot').value.toLowerCase();
             const filterClienteInicial = document.getElementById('filter-cliente-inicial').value;
@@ -616,7 +632,6 @@
             updateTable();
         }
 
-        // Event listeners para filtros
         document.getElementById('filter-ot').addEventListener('input', applyFilters);
         document.getElementById('filter-cliente-inicial').addEventListener('change', applyFilters);
         document.getElementById('filter-cliente-final').addEventListener('change', applyFilters);
@@ -624,61 +639,68 @@
         document.getElementById('filter-personal').addEventListener('change', applyFilters);
         document.getElementById('filter-estatus').addEventListener('change', applyFilters);
 
-        // Actualizar gráficas
         function updateCharts() {
             updateStatusChart();
-            updateNOMChart();
-            updateClientesChart();
-            updatePersonalChart();
+            updateMesChart();
+            updateTiemposChart();
         }
 
         function updateStatusChart() {
             const entregadas = filteredData.filter(r => getStatusCategory(r) === 'ENTREGADO').length;
-            const vencidas = filteredData.filter(r => getStatusCategory(r) === 'VENCIDO').length;
-            const proximas = filteredData.filter(r => getStatusCategory(r) === 'PROXIMO').length;
-            const pendientes = filteredData.length - entregadas - vencidas - proximas;
+            const tiempo = filteredData.filter(r => getStatusCategory(r) === 'TIEMPO').length;
+            const limite = filteredData.filter(r => getStatusCategory(r) === 'LIMITE').length;
+            const alerta = filteredData.filter(r => getStatusCategory(r) === 'ALERTA').length;
+            const pendiente = filteredData.filter(r => getStatusCategory(r) === 'PENDIENTE').length;
 
             if (charts.status) charts.status.destroy();
 
             charts.status = new Chart(document.getElementById('chartStatus'), {
                 type: 'doughnut',
                 data: {
-                    labels: ['Entregadas', 'Pendientes', 'Próximas', 'Vencidas'],
+                    labels: ['✅ Entregadas', '🟢 En tiempo', '🟠 En límite', '🔴 Alerta', '🟡 Pendiente'],
                     datasets: [{
-                        data: [entregadas, pendientes, proximas, vencidas],
-                        backgroundColor: ['#27ae60', '#f39c12', '#e67e22', '#e74c3c']
+                        data: [entregadas, tiempo, limite, alerta, pendiente],
+                        backgroundColor: ['#27ae60', '#2ecc71', '#f39c12', '#e74c3c', '#95a5a6']
                     }]
                 },
                 options: {
                     responsive: true,
                     maintainAspectRatio: true,
                     plugins: {
-                        legend: { position: 'bottom' }
+                        legend: { 
+                            position: 'bottom',
+                            labels: { font: { size: 10 } }
+                        }
                     }
                 }
             });
         }
 
-        function updateNOMChart() {
-            const nomCounts = {};
+        function updateMesChart() {
+            const mesesCount = {};
             filteredData.forEach(row => {
-                row.nom.split(',').forEach(nom => {
-                    nom = nom.trim();
-                    if (nom) nomCounts[nom] = (nomCounts[nom] || 0) + 1;
-                });
+                const fecha = parseFecha(row.fechaVisita);
+                if (fecha) {
+                    const mes = fecha.toLocaleDateString('es-MX', { year: 'numeric', month: 'short' });
+                    mesesCount[mes] = (mesesCount[mes] || 0) + 1;
+                }
             });
 
-            const sortedNoms = Object.entries(nomCounts).sort((a, b) => b[1] - a[1]);
+            const sortedMeses = Object.entries(mesesCount).sort((a, b) => {
+                const dateA = new Date(a[0]);
+                const dateB = new Date(b[0]);
+                return dateA - dateB;
+            });
 
-            if (charts.nom) charts.nom.destroy();
+            if (charts.mes) charts.mes.destroy();
 
-            charts.nom = new Chart(document.getElementById('chartNOM'), {
+            charts.mes = new Chart(document.getElementById('chartMes'), {
                 type: 'bar',
                 data: {
-                    labels: sortedNoms.map(([nom]) => nom),
+                    labels: sortedMeses.map(([mes]) => mes),
                     datasets: [{
-                        label: 'Cantidad',
-                        data: sortedNoms.map(([, count]) => count),
+                        label: 'OTs',
+                        data: sortedMeses.map(([, count]) => count),
                         backgroundColor: '#2d5f4f'
                     }]
                 },
@@ -689,34 +711,38 @@
                         legend: { display: false }
                     },
                     scales: {
-                        y: { beginAtZero: true }
+                        y: { 
+                            beginAtZero: true,
+                            ticks: { font: { size: 10 } }
+                        },
+                        x: {
+                            ticks: { font: { size: 10 } }
+                        }
                     }
                 }
             });
         }
 
-        function updateClientesChart() {
-            const clienteCounts = {};
-            filteredData.forEach(row => {
-                if (row.clienteFinal) {
-                    clienteCounts[row.clienteFinal] = (clienteCounts[row.clienteFinal] || 0) + 1;
-                }
-            });
+        function updateTiemposChart() {
+            const otsConTiempos = filteredData
+                .filter(r => getStatusCategory(r) === 'ENTREGADO')
+                .map(r => ({
+                    ot: r.ot,
+                    dias: calcularDiasEntrega(r)
+                }))
+                .filter(d => d.dias !== null)
+                .slice(0, 15); // Solo últimas 15
 
-            const sortedClientes = Object.entries(clienteCounts)
-                .sort((a, b) => b[1] - a[1])
-                .slice(0, 10);
+            if (charts.tiempos) charts.tiempos.destroy();
 
-            if (charts.clientes) charts.clientes.destroy();
-
-            charts.clientes = new Chart(document.getElementById('chartClientes'), {
+            charts.tiempos = new Chart(document.getElementById('chartTiempos'), {
                 type: 'bar',
                 data: {
-                    labels: sortedClientes.map(([cliente]) => cliente.substring(0, 30)),
+                    labels: otsConTiempos.map(d => d.ot),
                     datasets: [{
-                        label: 'OTs',
-                        data: sortedClientes.map(([, count]) => count),
-                        backgroundColor: '#3d7f6a'
+                        label: 'Días',
+                        data: otsConTiempos.map(d => d.dias),
+                        backgroundColor: '#3498db'
                     }]
                 },
                 options: {
@@ -727,47 +753,18 @@
                         legend: { display: false }
                     },
                     scales: {
-                        x: { beginAtZero: true }
+                        x: { 
+                            beginAtZero: true,
+                            ticks: { font: { size: 10 } }
+                        },
+                        y: {
+                            ticks: { font: { size: 9 } }
+                        }
                     }
                 }
             });
         }
 
-        function updatePersonalChart() {
-            const personalCounts = {};
-            filteredData.forEach(row => {
-                if (row.personal) {
-                    personalCounts[row.personal] = (personalCounts[row.personal] || 0) + 1;
-                }
-            });
-
-            const sortedPersonal = Object.entries(personalCounts).sort((a, b) => b[1] - a[1]);
-
-            if (charts.personal) charts.personal.destroy();
-
-            charts.personal = new Chart(document.getElementById('chartPersonal'), {
-                type: 'pie',
-                data: {
-                    labels: sortedPersonal.map(([p]) => p),
-                    datasets: [{
-                        data: sortedPersonal.map(([, count]) => count),
-                        backgroundColor: [
-                            '#2d5f4f', '#3d7f6a', '#27ae60', '#16a085', '#1abc9c',
-                            '#48c9b0', '#76d7c4', '#a2ded0', '#abebc6', '#d5f4e6'
-                        ]
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: true,
-                    plugins: {
-                        legend: { position: 'bottom' }
-                    }
-                }
-            });
-        }
-
-        // Actualizar tabla
         function updateTable() {
             const tbody = document.getElementById('tableBody');
             tbody.innerHTML = '';
@@ -776,6 +773,7 @@
                 const tr = document.createElement('tr');
                 const status = getStatusCategory(row);
                 const statusClass = `status-${status.toLowerCase()}`;
+                const dias = calcularDiasEntrega(row);
                 
                 tr.innerHTML = `
                     <td><strong>${row.ot}</strong></td>
@@ -787,13 +785,15 @@
                     <td>${row.fechaVisita}</td>
                     <td>${row.fechaDigital}</td>
                     <td>${row.fechaFisico}</td>
-                    <td><span class="status-badge ${statusClass}">${status}</span></td>
+                    <td>${dias !== null ? dias : '-'}</td>
+                    <td><span class="status-badge ${statusClass}">${row.estatusCalculado}</span></td>
                 `;
                 tbody.appendChild(tr);
             });
+
+            document.getElementById('table-count').textContent = filteredData.length;
         }
 
-        // Ordenar tabla
         let sortColumn = -1;
         let sortAscending = true;
 
@@ -805,7 +805,7 @@
                 sortAscending = true;
             }
 
-            const keys = ['ot', 'referencia', 'clienteInicial', 'clienteFinal', 'nom', 'personal', 'fechaVisita', 'fechaDigital', 'fechaFisico', 'estatus'];
+            const keys = ['ot', 'referencia', 'clienteInicial', 'clienteFinal', 'nom', 'personal', 'fechaVisita', 'fechaDigital', 'fechaFisico', 'dias', 'estatusCalculado'];
             const key = keys[column];
 
             filteredData.sort((a, b) => {
@@ -817,6 +817,11 @@
                     valB = parseFecha(valB) || new Date(0);
                 }
 
+                if (key === 'dias') {
+                    valA = calcularDiasEntrega(a) || 0;
+                    valB = calcularDiasEntrega(b) || 0;
+                }
+
                 if (valA < valB) return sortAscending ? -1 : 1;
                 if (valA > valB) return sortAscending ? 1 : -1;
                 return 0;
@@ -825,12 +830,11 @@
             updateTable();
         }
 
-        // Exportar CSV
         function exportToCSV() {
-            const headers = ['OT', 'Referencia', 'Cliente Inicial', 'Cliente Final', 'NOM', 'Personal', 'F. Visita', 'F. Digital', 'F. Físico', 'Estatus'];
+            const headers = ['OT', 'Referencia', 'Cliente Inicial', 'Cliente Final', 'NOM', 'Personal', 'F. Visita', 'F. Digital', 'F. Físico', 'Días', 'Estatus'];
             const rows = filteredData.map(row => [
                 row.ot, row.referencia, row.clienteInicial, row.clienteFinal, row.nom, row.personal,
-                row.fechaVisita, row.fechaDigital, row.fechaFisico, getStatusCategory(row)
+                row.fechaVisita, row.fechaDigital, row.fechaFisico, calcularDiasEntrega(row) || '', row.estatusCalculado
             ]);
 
             const csv = [headers, ...rows].map(row => 
@@ -844,7 +848,6 @@
             link.click();
         }
 
-        // Cargar datos al inicio
         loadData();
     </script>
 </body>
