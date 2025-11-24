@@ -1,0 +1,851 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Control - Ejecutiva Ambiental</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: #f5f7fa;
+            color: #2c3e50;
+            line-height: 1.6;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #2d5f4f 0%, #3d7f6a 100%);
+            color: white;
+            padding: 1.5rem 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .header h1 {
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            margin-top: 1rem;
+        }
+
+        .btn {
+            background: rgba(255,255,255,0.2);
+            border: 1px solid rgba(255,255,255,0.3);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+        }
+
+        .btn:hover {
+            background: rgba(255,255,255,0.3);
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .kpi-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .kpi-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+        }
+
+        .kpi-label {
+            font-size: 0.85rem;
+            color: #7f8c8d;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.5rem;
+        }
+
+        .kpi-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #2d5f4f;
+            margin-bottom: 0.5rem;
+        }
+
+        .kpi-subtitle {
+            font-size: 0.9rem;
+            color: #95a5a6;
+        }
+
+        .filters {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            margin-bottom: 2rem;
+        }
+
+        .filters h3 {
+            margin-bottom: 1rem;
+            color: #2d5f4f;
+            font-size: 1.1rem;
+        }
+
+        .filter-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .filter-group label {
+            font-size: 0.85rem;
+            color: #7f8c8d;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .filter-group select,
+        .filter-group input {
+            padding: 0.6rem;
+            border: 1px solid #dfe6e9;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            transition: border-color 0.3s;
+        }
+
+        .filter-group select:focus,
+        .filter-group input:focus {
+            outline: none;
+            border-color: #2d5f4f;
+        }
+
+        .charts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .chart-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .chart-card h3 {
+            margin-bottom: 1rem;
+            color: #2d5f4f;
+            font-size: 1.1rem;
+        }
+
+        .table-container {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            overflow: hidden;
+        }
+
+        .table-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid #ecf0f1;
+        }
+
+        .table-header h3 {
+            color: #2d5f4f;
+            font-size: 1.1rem;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            background: #f8f9fa;
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+            color: #2c3e50;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            position: sticky;
+            top: 0;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        th:hover {
+            background: #ecf0f1;
+        }
+
+        td {
+            padding: 1rem;
+            border-bottom: 1px solid #ecf0f1;
+            font-size: 0.9rem;
+        }
+
+        tr:hover {
+            background: #f8f9fa;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .status-entregado {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status-pendiente {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .status-vencido {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .status-proximo {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        canvas {
+            max-height: 300px;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 3rem;
+            color: #7f8c8d;
+        }
+
+        .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #2d5f4f;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+
+            .kpi-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .charts-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .filter-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>📊 Panel de Control - Ejecutiva Ambiental</h1>
+        <div class="header-actions">
+            <button class="btn" onclick="loadData()">🔄 Actualizar Datos</button>
+            <button class="btn" onclick="exportToCSV()">📥 Exportar CSV</button>
+            <span style="font-size: 0.9rem; margin-left: auto;">
+                Última actualización: <span id="lastUpdate">--</span>
+            </span>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- KPIs -->
+        <div class="kpi-grid">
+            <div class="kpi-card">
+                <div class="kpi-label">Total OTs</div>
+                <div class="kpi-value" id="kpi-total">0</div>
+                <div class="kpi-subtitle">Órdenes de Trabajo</div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-label">Entregadas</div>
+                <div class="kpi-value" id="kpi-entregadas" style="color: #27ae60;">0</div>
+                <div class="kpi-subtitle"><span id="kpi-entregadas-pct">0%</span> del total</div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-label">Pendientes</div>
+                <div class="kpi-value" id="kpi-pendientes" style="color: #f39c12;">0</div>
+                <div class="kpi-subtitle"><span id="kpi-pendientes-pct">0%</span> del total</div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-label">Próximas a Vencer</div>
+                <div class="kpi-value" id="kpi-proximas" style="color: #e67e22;">0</div>
+                <div class="kpi-subtitle">En 7 días o menos</div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-label">Vencidas</div>
+                <div class="kpi-value" id="kpi-vencidas" style="color: #e74c3c;">0</div>
+                <div class="kpi-subtitle">Fecha límite pasada</div>
+            </div>
+        </div>
+
+        <!-- Filtros -->
+        <div class="filters">
+            <h3>🔍 Filtros</h3>
+            <div class="filter-grid">
+                <div class="filter-group">
+                    <label>Buscar OT</label>
+                    <input type="text" id="filter-ot" placeholder="Ej: 0T25-29">
+                </div>
+                <div class="filter-group">
+                    <label>Cliente Inicial</label>
+                    <select id="filter-cliente-inicial">
+                        <option value="">Todos</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>Cliente Final</label>
+                    <select id="filter-cliente-final">
+                        <option value="">Todos</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>NOM</label>
+                    <select id="filter-nom">
+                        <option value="">Todas</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>Personal Ejecutiva</label>
+                    <select id="filter-personal">
+                        <option value="">Todos</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>Estatus</label>
+                    <select id="filter-estatus">
+                        <option value="">Todos</option>
+                        <option value="ENTREGADO">Entregado</option>
+                        <option value="PENDIENTE">Pendiente</option>
+                        <option value="VENCIDO">Vencido</option>
+                        <option value="PROXIMO">Próximo a vencer</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- Gráficas -->
+        <div class="charts-grid">
+            <div class="chart-card">
+                <h3>Distribución por Estatus</h3>
+                <canvas id="chartStatus"></canvas>
+            </div>
+            <div class="chart-card">
+                <h3>OTs por NOM</h3>
+                <canvas id="chartNOM"></canvas>
+            </div>
+            <div class="chart-card">
+                <h3>Top 10 Clientes</h3>
+                <canvas id="chartClientes"></canvas>
+            </div>
+            <div class="chart-card">
+                <h3>Por Personal Ejecutiva</h3>
+                <canvas id="chartPersonal"></canvas>
+            </div>
+        </div>
+
+        <!-- Tabla -->
+        <div class="table-container">
+            <div class="table-header">
+                <h3>📋 Órdenes de Trabajo</h3>
+            </div>
+            <div class="table-wrapper">
+                <table id="dataTable">
+                    <thead>
+                        <tr>
+                            <th onclick="sortTable(0)">OT</th>
+                            <th onclick="sortTable(1)">Referencia</th>
+                            <th onclick="sortTable(2)">Cliente Inicial</th>
+                            <th onclick="sortTable(3)">Cliente Final</th>
+                            <th onclick="sortTable(4)">NOM</th>
+                            <th onclick="sortTable(5)">Personal</th>
+                            <th onclick="sortTable(6)">F. Visita</th>
+                            <th onclick="sortTable(7)">F. Digital</th>
+                            <th onclick="sortTable(8)">F. Físico</th>
+                            <th onclick="sortTable(9)">Estatus</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody">
+                        <tr>
+                            <td colspan="10">
+                                <div class="loading">
+                                    <div class="spinner"></div>
+                                    Cargando datos...
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script>
+        // URL del CSV publicado (modifica el ID según tu Sheet)
+        const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTl2L2xQjqks4NnlPYq5VqvVt1EXcrP8I3qujcAXtsWeZKJsNb6j2prwu6lW5zGLm5Gj-O3AG5aOReZ/pub?output=csv&gid=0';
+        
+        let allData = [];
+        let filteredData = [];
+        let charts = {};
+
+        // Cargar datos
+        async function loadData() {
+            try {
+                const response = await fetch(CSV_URL);
+                const csvText = await response.text();
+                const rows = parseCSV(csvText);
+                
+                // Remover encabezado
+                const headers = rows[0];
+                allData = rows.slice(1).map(row => ({
+                    ot: row[1] || '',
+                    referencia: row[2] || '',
+                    clienteInicial: row[3] || '',
+                    clienteFinal: row[4] || '',
+                    nom: row[5] || '',
+                    proveedor: row[6] || '',
+                    personal: row[7] || '',
+                    fechaVisita: row[13] || '',
+                    fechaDigital: row[14] || '',
+                    fechaFisico: row[15] || '',
+                    estatus: row[17] || '',
+                    rawRow: row
+                }));
+
+                filteredData = [...allData];
+                
+                updateKPIs();
+                updateFilters();
+                updateCharts();
+                updateTable();
+                
+                document.getElementById('lastUpdate').textContent = new Date().toLocaleString('es-MX');
+            } catch (error) {
+                console.error('Error cargando datos:', error);
+                alert('Error al cargar los datos. Verifica la URL del CSV.');
+            }
+        }
+
+        // Parser CSV simple
+        function parseCSV(text) {
+            const rows = [];
+            let currentRow = [];
+            let currentField = '';
+            let inQuotes = false;
+
+            for (let i = 0; i < text.length; i++) {
+                const char = text[i];
+                const nextChar = text[i + 1];
+
+                if (char === '"' && inQuotes && nextChar === '"') {
+                    currentField += '"';
+                    i++;
+                } else if (char === '"') {
+                    inQuotes = !inQuotes;
+                } else if (char === ',' && !inQuotes) {
+                    currentRow.push(currentField);
+                    currentField = '';
+                } else if ((char === '\n' || char === '\r') && !inQuotes) {
+                    if (currentField || currentRow.length > 0) {
+                        currentRow.push(currentField);
+                        rows.push(currentRow);
+                        currentRow = [];
+                        currentField = '';
+                    }
+                    if (char === '\r' && nextChar === '\n') i++;
+                } else {
+                    currentField += char;
+                }
+            }
+
+            if (currentField || currentRow.length > 0) {
+                currentRow.push(currentField);
+                rows.push(currentRow);
+            }
+
+            return rows;
+        }
+
+        // Calcular estatus real
+        function getStatusCategory(row) {
+            const estatusText = row.estatus.toUpperCase();
+            if (estatusText.includes('ENTREGADO')) return 'ENTREGADO';
+            
+            const fechaFisico = parseFecha(row.fechaFisico);
+            const hoy = new Date();
+            hoy.setHours(0, 0, 0, 0);
+            
+            if (fechaFisico) {
+                const diffDays = Math.ceil((fechaFisico - hoy) / (1000 * 60 * 60 * 24));
+                if (diffDays < 0) return 'VENCIDO';
+                if (diffDays <= 7) return 'PROXIMO';
+            }
+            
+            return 'PENDIENTE';
+        }
+
+        // Parsear fecha
+        function parseFecha(fechaStr) {
+            if (!fechaStr) return null;
+            const parts = fechaStr.split('/');
+            if (parts.length !== 3) return null;
+            return new Date(parts[2], parts[1] - 1, parts[0]);
+        }
+
+        // Actualizar KPIs
+        function updateKPIs() {
+            const total = filteredData.length;
+            const entregadas = filteredData.filter(r => getStatusCategory(r) === 'ENTREGADO').length;
+            const vencidas = filteredData.filter(r => getStatusCategory(r) === 'VENCIDO').length;
+            const proximas = filteredData.filter(r => getStatusCategory(r) === 'PROXIMO').length;
+            const pendientes = total - entregadas - vencidas;
+
+            document.getElementById('kpi-total').textContent = total;
+            document.getElementById('kpi-entregadas').textContent = entregadas;
+            document.getElementById('kpi-entregadas-pct').textContent = `${total ? Math.round(entregadas/total*100) : 0}%`;
+            document.getElementById('kpi-pendientes').textContent = pendientes;
+            document.getElementById('kpi-pendientes-pct').textContent = `${total ? Math.round(pendientes/total*100) : 0}%`;
+            document.getElementById('kpi-proximas').textContent = proximas;
+            document.getElementById('kpi-vencidas').textContent = vencidas;
+        }
+
+        // Actualizar filtros
+        function updateFilters() {
+            const clientesIniciales = [...new Set(allData.map(r => r.clienteInicial))].filter(Boolean).sort();
+            const clientesFinales = [...new Set(allData.map(r => r.clienteFinal))].filter(Boolean).sort();
+            const noms = [...new Set(allData.flatMap(r => r.nom.split(',').map(n => n.trim())))].filter(Boolean).sort();
+            const personal = [...new Set(allData.map(r => r.personal))].filter(Boolean).sort();
+
+            fillSelect('filter-cliente-inicial', clientesIniciales);
+            fillSelect('filter-cliente-final', clientesFinales);
+            fillSelect('filter-nom', noms);
+            fillSelect('filter-personal', personal);
+        }
+
+        function fillSelect(id, options) {
+            const select = document.getElementById(id);
+            const currentValue = select.value;
+            select.innerHTML = '<option value="">Todos</option>';
+            options.forEach(opt => {
+                const option = document.createElement('option');
+                option.value = opt;
+                option.textContent = opt;
+                select.appendChild(option);
+            });
+            select.value = currentValue;
+        }
+
+        // Aplicar filtros
+        function applyFilters() {
+            const filterOT = document.getElementById('filter-ot').value.toLowerCase();
+            const filterClienteInicial = document.getElementById('filter-cliente-inicial').value;
+            const filterClienteFinal = document.getElementById('filter-cliente-final').value;
+            const filterNOM = document.getElementById('filter-nom').value;
+            const filterPersonal = document.getElementById('filter-personal').value;
+            const filterEstatus = document.getElementById('filter-estatus').value;
+
+            filteredData = allData.filter(row => {
+                if (filterOT && !row.ot.toLowerCase().includes(filterOT)) return false;
+                if (filterClienteInicial && row.clienteInicial !== filterClienteInicial) return false;
+                if (filterClienteFinal && row.clienteFinal !== filterClienteFinal) return false;
+                if (filterNOM && !row.nom.includes(filterNOM)) return false;
+                if (filterPersonal && row.personal !== filterPersonal) return false;
+                if (filterEstatus && getStatusCategory(row) !== filterEstatus) return false;
+                return true;
+            });
+
+            updateKPIs();
+            updateCharts();
+            updateTable();
+        }
+
+        // Event listeners para filtros
+        document.getElementById('filter-ot').addEventListener('input', applyFilters);
+        document.getElementById('filter-cliente-inicial').addEventListener('change', applyFilters);
+        document.getElementById('filter-cliente-final').addEventListener('change', applyFilters);
+        document.getElementById('filter-nom').addEventListener('change', applyFilters);
+        document.getElementById('filter-personal').addEventListener('change', applyFilters);
+        document.getElementById('filter-estatus').addEventListener('change', applyFilters);
+
+        // Actualizar gráficas
+        function updateCharts() {
+            updateStatusChart();
+            updateNOMChart();
+            updateClientesChart();
+            updatePersonalChart();
+        }
+
+        function updateStatusChart() {
+            const entregadas = filteredData.filter(r => getStatusCategory(r) === 'ENTREGADO').length;
+            const vencidas = filteredData.filter(r => getStatusCategory(r) === 'VENCIDO').length;
+            const proximas = filteredData.filter(r => getStatusCategory(r) === 'PROXIMO').length;
+            const pendientes = filteredData.length - entregadas - vencidas - proximas;
+
+            if (charts.status) charts.status.destroy();
+
+            charts.status = new Chart(document.getElementById('chartStatus'), {
+                type: 'doughnut',
+                data: {
+                    labels: ['Entregadas', 'Pendientes', 'Próximas', 'Vencidas'],
+                    datasets: [{
+                        data: [entregadas, pendientes, proximas, vencidas],
+                        backgroundColor: ['#27ae60', '#f39c12', '#e67e22', '#e74c3c']
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    plugins: {
+                        legend: { position: 'bottom' }
+                    }
+                }
+            });
+        }
+
+        function updateNOMChart() {
+            const nomCounts = {};
+            filteredData.forEach(row => {
+                row.nom.split(',').forEach(nom => {
+                    nom = nom.trim();
+                    if (nom) nomCounts[nom] = (nomCounts[nom] || 0) + 1;
+                });
+            });
+
+            const sortedNoms = Object.entries(nomCounts).sort((a, b) => b[1] - a[1]);
+
+            if (charts.nom) charts.nom.destroy();
+
+            charts.nom = new Chart(document.getElementById('chartNOM'), {
+                type: 'bar',
+                data: {
+                    labels: sortedNoms.map(([nom]) => nom),
+                    datasets: [{
+                        label: 'Cantidad',
+                        data: sortedNoms.map(([, count]) => count),
+                        backgroundColor: '#2d5f4f'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        y: { beginAtZero: true }
+                    }
+                }
+            });
+        }
+
+        function updateClientesChart() {
+            const clienteCounts = {};
+            filteredData.forEach(row => {
+                if (row.clienteFinal) {
+                    clienteCounts[row.clienteFinal] = (clienteCounts[row.clienteFinal] || 0) + 1;
+                }
+            });
+
+            const sortedClientes = Object.entries(clienteCounts)
+                .sort((a, b) => b[1] - a[1])
+                .slice(0, 10);
+
+            if (charts.clientes) charts.clientes.destroy();
+
+            charts.clientes = new Chart(document.getElementById('chartClientes'), {
+                type: 'bar',
+                data: {
+                    labels: sortedClientes.map(([cliente]) => cliente.substring(0, 30)),
+                    datasets: [{
+                        label: 'OTs',
+                        data: sortedClientes.map(([, count]) => count),
+                        backgroundColor: '#3d7f6a'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    indexAxis: 'y',
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        x: { beginAtZero: true }
+                    }
+                }
+            });
+        }
+
+        function updatePersonalChart() {
+            const personalCounts = {};
+            filteredData.forEach(row => {
+                if (row.personal) {
+                    personalCounts[row.personal] = (personalCounts[row.personal] || 0) + 1;
+                }
+            });
+
+            const sortedPersonal = Object.entries(personalCounts).sort((a, b) => b[1] - a[1]);
+
+            if (charts.personal) charts.personal.destroy();
+
+            charts.personal = new Chart(document.getElementById('chartPersonal'), {
+                type: 'pie',
+                data: {
+                    labels: sortedPersonal.map(([p]) => p),
+                    datasets: [{
+                        data: sortedPersonal.map(([, count]) => count),
+                        backgroundColor: [
+                            '#2d5f4f', '#3d7f6a', '#27ae60', '#16a085', '#1abc9c',
+                            '#48c9b0', '#76d7c4', '#a2ded0', '#abebc6', '#d5f4e6'
+                        ]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    plugins: {
+                        legend: { position: 'bottom' }
+                    }
+                }
+            });
+        }
+
+        // Actualizar tabla
+        function updateTable() {
+            const tbody = document.getElementById('tableBody');
+            tbody.innerHTML = '';
+
+            filteredData.forEach(row => {
+                const tr = document.createElement('tr');
+                const status = getStatusCategory(row);
+                const statusClass = `status-${status.toLowerCase()}`;
+                
+                tr.innerHTML = `
+                    <td><strong>${row.ot}</strong></td>
+                    <td>${row.referencia}</td>
+                    <td>${row.clienteInicial}</td>
+                    <td>${row.clienteFinal}</td>
+                    <td>${row.nom}</td>
+                    <td>${row.personal}</td>
+                    <td>${row.fechaVisita}</td>
+                    <td>${row.fechaDigital}</td>
+                    <td>${row.fechaFisico}</td>
+                    <td><span class="status-badge ${statusClass}">${status}</span></td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        // Ordenar tabla
+        let sortColumn = -1;
+        let sortAscending = true;
+
+        function sortTable(column) {
+            if (sortColumn === column) {
+                sortAscending = !sortAscending;
+            } else {
+                sortColumn = column;
+                sortAscending = true;
+            }
+
+            const keys = ['ot', 'referencia', 'clienteInicial', 'clienteFinal', 'nom', 'personal', 'fechaVisita', 'fechaDigital', 'fechaFisico', 'estatus'];
+            const key = keys[column];
+
+            filteredData.sort((a, b) => {
+                let valA = a[key] || '';
+                let valB = b[key] || '';
+
+                if (key.includes('fecha')) {
+                    valA = parseFecha(valA) || new Date(0);
+                    valB = parseFecha(valB) || new Date(0);
+                }
+
+                if (valA < valB) return sortAscending ? -1 : 1;
+                if (valA > valB) return sortAscending ? 1 : -1;
+                return 0;
+            });
+
+            updateTable();
+        }
+
+        // Exportar CSV
+        function exportToCSV() {
+            const headers = ['OT', 'Referencia', 'Cliente Inicial', 'Cliente Final', 'NOM', 'Personal', 'F. Visita', 'F. Digital', 'F. Físico', 'Estatus'];
+            const rows = filteredData.map(row => [
+                row.ot, row.referencia, row.clienteInicial, row.clienteFinal, row.nom, row.personal,
+                row.fechaVisita, row.fechaDigital, row.fechaFisico, getStatusCategory(row)
+            ]);
+
+            const csv = [headers, ...rows].map(row => 
+                row.map(cell => `"${cell}"`).join(',')
+            ).join('\n');
+
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = `ejecutiva_ambiental_${new Date().toISOString().split('T')[0]}.csv`;
+            link.click();
+        }
+
+        // Cargar datos al inicio
+        loadData();
+    </script>
+</body>
+</html>
