@@ -430,7 +430,6 @@
                 const csvText = await response.text();
                 const rows = parseCSV(csvText);
                 
-                // Headers en fila 0, datos desde fila 1
                 allData = rows.slice(1).map(row => ({
                     ot: row[1] || '',                    // B
                     referencia: row[2] || '',            // C
@@ -439,13 +438,14 @@
                     nom: row[5] || '',                   // F
                     proveedor: row[6] || '',             // G
                     personal: row[7] || '',              // H
-                    fechaVisita: row[8] || '',           // I (índice 8)
-                    fechaDigital: row[13] || '',         // N (índice 13)
-                    fechaFisico: row[14] || '',          // O (índice 14)
-                    estatusAuto: row[15] || '',          // P (índice 15) - Estatus automático con emojis
-                    entregadoManual: row[16] || '',      // Q (índice 16) - "ENTREGADO" manual
+                    fechaVisita: row[8] || '',           // I
+                    fechaDigital: row[13] || '',         // N
+                    fechaFisico: row[14] || '',          // O
+                    estatusAuto: row[15] || '',          // P - Estatus con emojis
+                    entregadoManual: row[16] || '',      // Q - "ENTREGADO" manual
+                    fechaRealEntrega: row[18] || '',     // S - Fecha cuando se marcó entregado
                     rawRow: row
-                })).filter(row => row.ot); // Filtrar filas vacías
+                })).filter(row => row.ot);
 
                 filteredData = [...allData];
                 
@@ -500,7 +500,6 @@
             return rows;
         }
 
-        // Lee el estatus de la columna P (estatusAuto)
         function getStatusCategory(row) {
             const estatus = row.estatusAuto;
             if (estatus.includes('Entregado') || estatus.includes('✅')) return 'ENTREGADO';
@@ -518,12 +517,16 @@
             return new Date(parts[2], parts[1] - 1, parts[0]);
         }
 
-        // Calcula días reales de entrega: Fecha Físico - Fecha Visita
+        // NUEVO: Calcular tiempo real de entrega
+        // Tiempo = Fecha Real Entrega (S) - Fecha Visita (I)
         function calcularDiasEntrega(row) {
-            const fechaInicio = parseFecha(row.fechaVisita);
-            const fechaFin = parseFecha(row.fechaFisico);
-            if (!fechaInicio || !fechaFin) return null;
-            const diff = Math.ceil((fechaFin - fechaInicio) / (1000 * 60 * 60 * 24));
+            const fechaVisita = parseFecha(row.fechaVisita);
+            const fechaRealEntrega = parseFecha(row.fechaRealEntrega);
+            
+            // Si no tiene ambas fechas, retornar null
+            if (!fechaVisita || !fechaRealEntrega) return null;
+            
+            const diff = Math.ceil((fechaRealEntrega - fechaVisita) / (1000 * 60 * 60 * 24));
             return diff;
         }
 
@@ -534,11 +537,11 @@
             const limite = filteredData.filter(r => getStatusCategory(r) === 'LIMITE').length;
             const vencidas = filteredData.filter(r => getStatusCategory(r) === 'ALERTA').length;
 
-            // Calcular tiempo promedio de entrega (solo entregadas con fechas válidas)
+            // Calcular tiempo promedio de entrega (solo entregadas con ambas fechas)
             const entregadasConDias = filteredData
                 .filter(r => r.entregadoManual.toUpperCase().includes('ENTREGADO'))
                 .map(r => calcularDiasEntrega(r))
-                .filter(d => d !== null && d > 0);
+                .filter(d => d !== null && d >= 0);
             
             const promedio = entregadasConDias.length > 0 
                 ? Math.round(entregadasConDias.reduce((a, b) => a + b, 0) / entregadasConDias.length)
@@ -706,7 +709,7 @@
                     ot: r.ot,
                     dias: calcularDiasEntrega(r)
                 }))
-                .filter(d => d.dias !== null && d.dias > 0)
+                .filter(d => d.dias !== null && d.dias >= 0)
                 .sort((a, b) => b.dias - a.dias)
                 .slice(0, 15);
 
