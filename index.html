@@ -295,126 +295,73 @@
         }
 
         /* INFORMES STYLES */
-        .informes-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 1rem;
-        }
-
-        .informe-card {
+        .informes-table {
+            width: 100%;
+            border-collapse: collapse;
             background: white;
-            border-radius: 8px;
-            padding: 1.2rem;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.08);
-            transition: all 0.3s;
-            border-left: 4px solid #2d5f4f;
         }
 
-        .informe-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-        }
-
-        .informe-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: start;
-            margin-bottom: 1rem;
-        }
-
-        .informe-empresa {
-            font-weight: 700;
-            color: #2d5f4f;
-            font-size: 1.1rem;
-            line-height: 1.3;
-        }
-
-        .informe-fecha {
-            font-size: 0.75rem;
-            color: #95a5a6;
+        .informes-table thead th {
             background: #f8f9fa;
-            padding: 0.3rem 0.6rem;
-            border-radius: 4px;
-        }
-
-        .informe-details {
-            margin: 0.8rem 0;
-        }
-
-        .informe-detail {
-            display: flex;
-            gap: 0.5rem;
-            margin-bottom: 0.5rem;
-            font-size: 0.85rem;
-        }
-
-        .informe-detail-label {
+            padding: 0.8rem;
+            text-align: left;
             font-weight: 600;
-            color: #7f8c8d;
-            min-width: 80px;
-        }
-
-        .informe-detail-value {
             color: #2c3e50;
-        }
-
-        .informe-actions {
-            display: flex;
-            gap: 0.5rem;
-            margin-top: 1rem;
-            padding-top: 1rem;
-            border-top: 1px solid #ecf0f1;
-        }
-
-        .action-btn {
-            flex: 1;
-            padding: 0.6rem;
-            border: none;
-            border-radius: 6px;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            position: sticky;
+            top: 0;
             cursor: pointer;
+            user-select: none;
+            z-index: 10;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        .informes-table thead th:hover {
+            background: #ecf0f1;
+        }
+
+        .informes-table tbody td {
+            padding: 0.8rem;
+            border-bottom: 1px solid #ecf0f1;
             font-size: 0.85rem;
-            font-weight: 500;
-            transition: all 0.3s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.4rem;
+            vertical-align: middle;
         }
 
-        .action-btn.drive {
-            background: #4285f4;
-            color: white;
+        .informes-table tbody tr:hover {
+            background: #f8f9fa;
         }
 
-        .action-btn.drive:hover {
-            background: #3367d6;
+        .action-btn-small {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1.2rem;
+            padding: 0.3rem 0.5rem;
+            border-radius: 4px;
+            transition: all 0.2s;
+            margin: 0 0.1rem;
         }
 
-        .action-btn.whatsapp {
-            background: #25d366;
-            color: white;
+        .action-btn-small:hover {
+            transform: scale(1.2);
         }
 
-        .action-btn.whatsapp:hover {
-            background: #1da851;
+        .action-btn-small.drive:hover {
+            background: #e3f2fd;
         }
 
-        .action-btn.email {
-            background: #ea4335;
-            color: white;
+        .action-btn-small.whatsapp:hover {
+            background: #e8f5e9;
         }
 
-        .action-btn.email:hover {
-            background: #d33426;
+        .action-btn-small.email:hover {
+            background: #ffebee;
         }
 
-        .action-btn.copy {
-            background: #95a5a6;
-            color: white;
-        }
-
-        .action-btn.copy:hover {
-            background: #7f8c8d;
+        .action-btn-small.copy:hover {
+            background: #f5f5f5;
         }
 
         .no-results {
@@ -456,12 +403,34 @@
                 white-space: nowrap;
             }
 
-            .informes-grid {
-                grid-template-columns: 1fr;
+            /* Hacer la tabla de informes scrollable horizontalmente en móvil */
+            .informes-table {
+                display: block;
+                overflow-x: auto;
+                white-space: nowrap;
             }
 
-            .informe-actions {
-                flex-direction: column;
+            .informes-table thead,
+            .informes-table tbody,
+            .informes-table tr {
+                display: table;
+                width: 100%;
+                table-layout: fixed;
+            }
+
+            .informes-table td,
+            .informes-table th {
+                min-width: 120px;
+            }
+
+            .informes-table td:first-child,
+            .informes-table th:first-child {
+                min-width: 100px;
+            }
+
+            .informes-table td:last-child,
+            .informes-table th:last-child {
+                min-width: 180px;
             }
         }
 
@@ -685,10 +654,12 @@
                 <div class="table-header">
                     <h3>📄 Informes Disponibles (<span id="informes-count">0</span> registros)</h3>
                 </div>
-                <div id="informesContainer" style="padding: 1.5rem;">
-                    <div class="loading">
-                        <div class="spinner"></div>
-                        Cargando informes...
+                <div class="table-wrapper">
+                    <div id="informesContainer">
+                        <div class="loading">
+                            <div class="spinner"></div>
+                            Cargando informes...
+                        </div>
                     </div>
                 </div>
             </div>
@@ -1265,54 +1236,84 @@
                 return;
             }
 
-            container.innerHTML = `<div class="informes-grid"></div>`;
-            const grid = container.querySelector('.informes-grid');
+            // Crear tabla de informes
+            let tableHTML = `
+                <table class="informes-table">
+                    <thead>
+                        <tr>
+                            <th onclick="sortInformes('fecha')">Fecha</th>
+                            <th onclick="sortInformes('empresa')">Empresa</th>
+                            <th onclick="sortInformes('nom')">NOM</th>
+                            <th onclick="sortInformes('persona')">Contacto</th>
+                            <th onclick="sortInformes('correo')">Correo</th>
+                            <th onclick="sortInformes('rfc')">RFC</th>
+                            <th style="text-align: center;">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
 
             filteredInformes.forEach(informe => {
-                const card = document.createElement('div');
-                card.className = 'informe-card';
-                card.innerHTML = `
-                    <div class="informe-header">
-                        <div class="informe-empresa">${informe.empresa}</div>
-                        <div class="informe-fecha">${informe.fecha}</div>
-                    </div>
-                    <div class="informe-details">
-                        <div class="informe-detail">
-                            <span class="informe-detail-label">NOM:</span>
-                            <span class="informe-detail-value">${informe.nom}</span>
-                        </div>
-                        <div class="informe-detail">
-                            <span class="informe-detail-label">Contacto:</span>
-                            <span class="informe-detail-value">${informe.persona}</span>
-                        </div>
-                        <div class="informe-detail">
-                            <span class="informe-detail-label">Correo:</span>
-                            <span class="informe-detail-value">${informe.correo}</span>
-                        </div>
-                        ${informe.rfc ? `
-                        <div class="informe-detail">
-                            <span class="informe-detail-label">RFC:</span>
-                            <span class="informe-detail-value">${informe.rfc}</span>
-                        </div>
-                        ` : ''}
-                    </div>
-                    <div class="informe-actions">
-                        <button class="action-btn drive" onclick="openDrive('${informe.link}')">
-                            📁 Ver en Drive
-                        </button>
-                        <button class="action-btn whatsapp" onclick="shareWhatsApp('${escapeQuotes(informe.empresa)}', '${informe.link}')">
-                            💬 WhatsApp
-                        </button>
-                        <button class="action-btn email" onclick="shareEmail('${escapeQuotes(informe.empresa)}', '${informe.link}', '${informe.correo}')">
-                            ✉️ Email
-                        </button>
-                        <button class="action-btn copy" onclick="copyLink('${informe.link}')">
-                            📋 Copiar
-                        </button>
-                    </div>
+                tableHTML += `
+                    <tr>
+                        <td style="white-space: nowrap;">${informe.fecha.split(' ')[0]}</td>
+                        <td><strong>${informe.empresa}</strong></td>
+                        <td>${informe.nom}</td>
+                        <td>${informe.persona}</td>
+                        <td>${informe.correo}</td>
+                        <td>${informe.rfc}</td>
+                        <td style="white-space: nowrap;">
+                            <button class="action-btn-small drive" onclick="openDrive('${informe.link}')" title="Ver en Drive">
+                                📁
+                            </button>
+                            <button class="action-btn-small whatsapp" onclick="shareWhatsApp('${escapeQuotes(informe.empresa)}', '${informe.link}')" title="Compartir por WhatsApp">
+                                💬
+                            </button>
+                            <button class="action-btn-small email" onclick="shareEmail('${escapeQuotes(informe.empresa)}', '${informe.link}', '${informe.correo}')" title="Enviar por Email">
+                                ✉️
+                            </button>
+                            <button class="action-btn-small copy" onclick="copyLink('${informe.link}')" title="Copiar enlace">
+                                📋
+                            </button>
+                        </td>
+                    </tr>
                 `;
-                grid.appendChild(card);
             });
+
+            tableHTML += `
+                    </tbody>
+                </table>
+            `;
+
+            container.innerHTML = tableHTML;
+        }
+
+        let sortInformesColumn = '';
+        let sortInformesAscending = true;
+
+        function sortInformes(column) {
+            if (sortInformesColumn === column) {
+                sortInformesAscending = !sortInformesAscending;
+            } else {
+                sortInformesColumn = column;
+                sortInformesAscending = true;
+            }
+
+            filteredInformes.sort((a, b) => {
+                let valA = a[column] || '';
+                let valB = b[column] || '';
+
+                if (column === 'fecha') {
+                    valA = parseFecha(valA.split(' ')[0]) || new Date(0);
+                    valB = parseFecha(valB.split(' ')[0]) || new Date(0);
+                }
+
+                if (valA < valB) return sortInformesAscending ? -1 : 1;
+                if (valA > valB) return sortInformesAscending ? 1 : -1;
+                return 0;
+            });
+
+            renderInformes();
         }
 
         function escapeQuotes(str) {
