@@ -368,17 +368,17 @@
 
         .action-btn {
             flex: 1;
-            padding: 0.6rem;
+            padding: 0.5rem;
             border: none;
             border-radius: 6px;
             cursor: pointer;
-            font-size: 0.85rem;
+            font-size: 0.75rem;
             font-weight: 500;
             transition: all 0.3s;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 0.4rem;
+            gap: 0.3rem;
         }
 
         .action-btn.drive {
@@ -426,6 +426,18 @@
         .no-results-icon {
             font-size: 3rem;
             margin-bottom: 1rem;
+        }
+
+        /* Botones de acción en tabla */
+        .table-action-btns {
+            display: flex;
+            gap: 0.3rem;
+            flex-wrap: wrap;
+        }
+
+        .table-action-btns .action-btn {
+            padding: 0.4rem 0.6rem;
+            font-size: 0.7rem;
         }
 
         @media (max-width: 1200px) {
@@ -634,11 +646,12 @@
                                 <th onclick="sortTable(8)">F. Físico</th>
                                 <th onclick="sortTable(9)">Días</th>
                                 <th onclick="sortTable(10)">Estatus</th>
+                                <th>Acciones</th>
                             </tr>
                         </thead>
                         <tbody id="tableBody">
                             <tr>
-                                <td colspan="11">
+                                <td colspan="12">
                                     <div class="loading">
                                         <div class="spinner"></div>
                                         Cargando datos...
@@ -743,6 +756,7 @@
                     estatusAuto: row[15] || '',
                     entregadoManual: row[16] || '',
                     fechaRealEntrega: row[18] || '',
+                    linkOT: row[26] || '', // Columna AA (índice 26)
                     rawRow: row
                 })).filter(row => row.ot);
 
@@ -1060,6 +1074,24 @@
                     <td>${row.fechaFisico}</td>
                     <td>${dias !== null ? dias : '-'}</td>
                     <td>${row.estatusAuto}</td>
+                    <td>
+                        ${row.linkOT ? `
+                        <div class="table-action-btns">
+                            <button class="action-btn drive" onclick="openDriveOT('${row.linkOT}')">
+                                📁 Ver
+                            </button>
+                            <button class="action-btn whatsapp" onclick="shareWhatsAppOT('${escapeQuotes(row.ot)}', '${escapeQuotes(row.clienteFinal)}', '${row.linkOT}')">
+                                💬
+                            </button>
+                            <button class="action-btn email" onclick="shareEmailOT('${escapeQuotes(row.ot)}', '${escapeQuotes(row.clienteFinal)}', '${row.linkOT}')">
+                                ✉️
+                            </button>
+                            <button class="action-btn copy" onclick="copyLinkOT('${row.linkOT}')">
+                                📋
+                            </button>
+                        </div>
+                        ` : '<span style="color: #95a5a6; font-size: 0.75rem;">Sin link</span>'}
+                    </td>
                 `;
                 tbody.appendChild(tr);
             });
@@ -1119,6 +1151,62 @@
             link.href = URL.createObjectURL(blob);
             link.download = `ejecutiva_ambiental_${new Date().toISOString().split('T')[0]}.csv`;
             link.click();
+        }
+
+        // ==================== FUNCIONES PARA COMPARTIR OT ====================
+        function escapeQuotes(str) {
+            return str.replace(/'/g, "\\'").replace(/"/g, '\\"');
+        }
+
+        function openDriveOT(link) {
+            if (!link) {
+                showToast('⚠️ No hay link disponible');
+                return;
+            }
+            window.open(link, '_blank');
+        }
+
+        function shareWhatsAppOT(ot, cliente, link) {
+            if (!link) {
+                showToast('⚠️ No hay link disponible');
+                return;
+            }
+            
+            const mensaje = `📋 *ORDEN DE TRABAJO ${ot}*\n\n🏢 *Empresa:* ${cliente}\n\n📄 *Ver Orden de Trabajo:*\n${link}\n\n_Ejecutiva Ambiental_\n☎️ 222-941-7295`;
+            const url = `https://wa.me/?text=${encodeURIComponent(mensaje)}`;
+            window.open(url, '_blank');
+        }
+
+        function shareEmailOT(ot, cliente, link) {
+            if (!link) {
+                showToast('⚠️ No hay link disponible');
+                return;
+            }
+            
+            const subject = `Orden de Trabajo ${ot} - ${cliente} - Ejecutiva Ambiental`;
+            const body = `Estimado cliente,\n\nLe compartimos la Orden de Trabajo ${ot} para su revisión y seguimiento.\n\n🏢 INFORMACIÓN DEL SERVICIO:\n• Empresa: ${cliente}\n• Orden: ${ot}\n\n📄 VER ORDEN DE TRABAJO:\n${link}\n\n📋 INSTRUCCIONES:\n1. Haga clic en el link para ver la OT en Google Drive\n2. Revise los servicios programados\n3. Confirme fechas y horarios disponibles\n\n📞 CONTACTO:\nPara cualquier duda o aclaración:\nTel: 222-941-7295\nEmail: eduwin.ejecutiva@gmail.com\n\nSaludos cordiales,\nEJECUTIVA AMBIENTAL\nSeguridad e Higiene | Capacitación | Mantenimiento Industrial`;
+            
+            const mailto = `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+            window.location.href = mailto;
+        }
+
+        function copyLinkOT(link) {
+            if (!link) {
+                showToast('⚠️ No hay link disponible');
+                return;
+            }
+            
+            navigator.clipboard.writeText(link).then(() => {
+                showToast('✅ Link copiado al portapapeles');
+            }).catch(() => {
+                const textarea = document.createElement('textarea');
+                textarea.value = link;
+                document.body.appendChild(textarea);
+                textarea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textarea);
+                showToast('✅ Link copiado al portapapeles');
+            });
         }
 
         // ==================== INFORMES (TAB 2) ====================
@@ -1256,10 +1344,6 @@
             });
         }
 
-        function escapeQuotes(str) {
-            return str.replace(/'/g, "\\'").replace(/"/g, '\\"');
-        }
-
         function openDrive(link) {
             window.open(link, '_blank');
         }
@@ -1281,7 +1365,6 @@
             navigator.clipboard.writeText(link).then(() => {
                 showToast('✅ Enlace copiado al portapapeles');
             }).catch(() => {
-                // Fallback para navegadores que no soportan clipboard API
                 const textarea = document.createElement('textarea');
                 textarea.value = link;
                 document.body.appendChild(textarea);
