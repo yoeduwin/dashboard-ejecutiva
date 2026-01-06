@@ -188,6 +188,7 @@
             border-color: #2d5f4f;
         }
 
+        /* GRÁFICAS MINIMALISTAS */
         .charts-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -197,15 +198,20 @@
 
         .chart-card {
             background: white;
-            padding: 1rem;
+            padding: 0.8rem;
             border-radius: 8px;
             box-shadow: 0 2px 6px rgba(0,0,0,0.08);
         }
 
         .chart-card h3 {
-            margin-bottom: 0.8rem;
+            margin-bottom: 0.5rem;
             color: #2d5f4f;
-            font-size: 0.95rem;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        canvas {
+            max-height: 150px !important;
         }
 
         .table-container {
@@ -269,8 +275,16 @@
             background: #f8f9fa;
         }
 
-        canvas {
-            max-height: 220px !important;
+        /* SEPARADOR DE SECCIONES */
+        .table-section-divider {
+            background: #ecf0f1;
+            font-weight: 600;
+            color: #7f8c8d;
+            text-align: center;
+            font-size: 0.8rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            padding: 0.6rem;
         }
 
         .loading {
@@ -501,6 +515,162 @@
                 opacity: 1;
             }
         }
+
+        /* MODAL DE ALERTAS */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 12px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            animation: slideUp 0.3s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .modal-header {
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+            color: white;
+            padding: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .modal-header h2 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .modal-body {
+            padding: 1.5rem;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .alert-message {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border-radius: 4px;
+            font-size: 0.95rem;
+            color: #856404;
+        }
+
+        .ot-vencida-item {
+            background: #f8f9fa;
+            border-left: 4px solid #e74c3c;
+            padding: 1rem;
+            margin-bottom: 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s;
+        }
+
+        .ot-vencida-item:hover {
+            background: #ecf0f1;
+            transform: translateX(5px);
+        }
+
+        .ot-vencida-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .ot-vencida-numero {
+            font-weight: 700;
+            color: #e74c3c;
+            font-size: 1.1rem;
+        }
+
+        .ot-vencida-dias {
+            background: #e74c3c;
+            color: white;
+            padding: 0.3rem 0.6rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .ot-vencida-info {
+            font-size: 0.85rem;
+            color: #555;
+            margin-bottom: 0.3rem;
+        }
+
+        .ot-vencida-info strong {
+            color: #2c3e50;
+            font-weight: 600;
+        }
+
+        .modal-footer {
+            padding: 1rem 1.5rem;
+            border-top: 1px solid #ecf0f1;
+            display: flex;
+            justify-content: flex-end;
+            gap: 0.8rem;
+        }
+
+        .modal-btn {
+            padding: 0.6rem 1.5rem;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .modal-btn-primary {
+            background: #e74c3c;
+            color: white;
+        }
+
+        .modal-btn-primary:hover {
+            background: #c0392b;
+        }
+
+        .modal-btn-secondary {
+            background: #95a5a6;
+            color: white;
+        }
+
+        .modal-btn-secondary:hover {
+            background: #7f8c8d;
+        }
     </style>
 </head>
 <body>
@@ -574,21 +744,15 @@
                     </div>
                     <div class="filter-group">
                         <label>Cliente Inicial</label>
-                        <select id="filter-cliente-inicial">
-                            <option value="">Todos</option>
-                        </select>
+                        <input type="text" id="filter-cliente-inicial" placeholder="Buscar cliente...">
                     </div>
                     <div class="filter-group">
                         <label>Cliente Final</label>
-                        <select id="filter-cliente-final">
-                            <option value="">Todos</option>
-                        </select>
+                        <input type="text" id="filter-cliente-final" placeholder="Buscar cliente...">
                     </div>
                     <div class="filter-group">
                         <label>NOM</label>
-                        <select id="filter-nom">
-                            <option value="">Todas</option>
-                        </select>
+                        <input type="text" id="filter-nom" placeholder="Buscar NOM...">
                     </div>
                     <div class="filter-group">
                         <label>Personal Ejecutiva</label>
@@ -610,7 +774,7 @@
                 </div>
             </div>
 
-            <!-- Gráficas -->
+            <!-- Gráficas Minimalistas -->
             <div class="charts-grid">
                 <div class="chart-card">
                     <h3>Distribución por Estatus</h3>
@@ -756,9 +920,14 @@
                     estatusAuto: row[15] || '',
                     entregadoManual: row[16] || '',
                     fechaRealEntrega: row[18] || '',
-                    linkOT: row[26] || '', // Columna AA (índice 26)
+                    linkOT: row[26] || '',
                     rawRow: row
                 })).filter(row => row.ot);
+
+                // ORDENAR POR OT DE MÁS RECIENTE A MÁS ANTIGUA
+                allData.sort((a, b) => {
+                    return b.ot.localeCompare(a.ot);
+                });
 
                 filteredData = [...allData];
                 
@@ -767,11 +936,152 @@
                 updateCharts();
                 updateTable();
                 
+                // VERIFICAR OTs VENCIDAS Y MOSTRAR ALERTA
+                checkOtsVencidas();
+                
                 document.getElementById('lastUpdate').textContent = new Date().toLocaleString('es-MX');
             } catch (error) {
                 console.error('Error cargando datos:', error);
                 alert('Error al cargar los datos. Verifica la conexión.');
             }
+        }
+
+        // ==================== SISTEMA DE ALERTAS OTS VENCIDAS ====================
+        function checkOtsVencidas() {
+            // Filtrar solo OTs activas (no entregadas) y con estatus ALERTA
+            const otsVencidas = allData.filter(row => 
+                !row.entregadoManual.toUpperCase().includes('ENTREGADO') && 
+                getStatusCategory(row) === 'ALERTA'
+            );
+
+            if (otsVencidas.length > 0) {
+                mostrarAlertaVencidas(otsVencidas);
+            }
+        }
+
+        function mostrarAlertaVencidas(otsVencidas) {
+            // Crear overlay
+            const overlay = document.createElement('div');
+            overlay.className = 'modal-overlay';
+            overlay.id = 'alertModal';
+
+            // Crear contenido del modal
+            const modalContent = document.createElement('div');
+            modalContent.className = 'modal-content';
+
+            // Header del modal
+            const header = document.createElement('div');
+            header.className = 'modal-header';
+            header.innerHTML = `
+                <span style="font-size: 2rem;">🔴</span>
+                <h2>¡ATENCIÓN! OTs Vencidas Detectadas</h2>
+            `;
+
+            // Body del modal
+            const body = document.createElement('div');
+            body.className = 'modal-body';
+
+            const alertMessage = document.createElement('div');
+            alertMessage.className = 'alert-message';
+            alertMessage.innerHTML = `
+                <strong>⚠️ Acción Requerida:</strong><br>
+                Se ${otsVencidas.length === 1 ? 'ha detectado 1 orden de trabajo vencida' : `han detectado ${otsVencidas.length} órdenes de trabajo vencidas`} 
+                que requieren atención inmediata. Por favor, revise y tome las acciones necesarias.
+            `;
+            body.appendChild(alertMessage);
+
+            // Lista de OTs vencidas
+            otsVencidas.forEach(ot => {
+                const item = document.createElement('div');
+                item.className = 'ot-vencida-item';
+                
+                const diasVencidos = calcularDiasVencimiento(ot);
+                
+                item.innerHTML = `
+                    <div class="ot-vencida-header">
+                        <span class="ot-vencida-numero">${ot.ot}</span>
+                        <span class="ot-vencida-dias">${diasVencidos > 0 ? `Vencida hace ${diasVencidos} días` : 'Vencida hoy'}</span>
+                    </div>
+                    <div class="ot-vencida-info">
+                        <strong>Cliente:</strong> ${ot.clienteFinal}
+                    </div>
+                    <div class="ot-vencida-info">
+                        <strong>NOM:</strong> ${ot.nom}
+                    </div>
+                    <div class="ot-vencida-info">
+                        <strong>Fecha Visita:</strong> ${ot.fechaVisita}
+                    </div>
+                    <div class="ot-vencida-info">
+                        <strong>Responsable:</strong> ${ot.personal}
+                    </div>
+                    <div class="ot-vencida-info">
+                        <strong>Estatus:</strong> ${ot.estatusAuto}
+                    </div>
+                `;
+                body.appendChild(item);
+            });
+
+            // Footer del modal
+            const footer = document.createElement('div');
+            footer.className = 'modal-footer';
+            footer.innerHTML = `
+                <button class="modal-btn modal-btn-secondary" onclick="cerrarAlertaVencidas()">
+                    Cerrar
+                </button>
+                <button class="modal-btn modal-btn-primary" onclick="filtrarVencidas()">
+                    Ver OTs Vencidas en Tabla
+                </button>
+            `;
+
+            // Ensamblar modal
+            modalContent.appendChild(header);
+            modalContent.appendChild(body);
+            modalContent.appendChild(footer);
+            overlay.appendChild(modalContent);
+
+            // Agregar al DOM
+            document.body.appendChild(overlay);
+
+            // Cerrar al hacer click en el overlay (fuera del modal)
+            overlay.addEventListener('click', function(e) {
+                if (e.target === overlay) {
+                    cerrarAlertaVencidas();
+                }
+            });
+        }
+
+        function calcularDiasVencimiento(row) {
+            const fechaVisita = parseFecha(row.fechaVisita);
+            if (!fechaVisita) return 0;
+            
+            const hoy = new Date();
+            const diasLimite = 5; // Días límite para entrega
+            const fechaLimite = new Date(fechaVisita);
+            fechaLimite.setDate(fechaLimite.getDate() + diasLimite);
+            
+            const diasVencidos = Math.floor((hoy - fechaLimite) / (1000 * 60 * 60 * 24));
+            return diasVencidos > 0 ? diasVencidos : 0;
+        }
+
+        function cerrarAlertaVencidas() {
+            const modal = document.getElementById('alertModal');
+            if (modal) {
+                modal.style.animation = 'fadeIn 0.3s ease-out reverse';
+                setTimeout(() => modal.remove(), 300);
+            }
+        }
+
+        function filtrarVencidas() {
+            cerrarAlertaVencidas();
+            
+            // Aplicar filtro de ALERTA
+            document.getElementById('filter-estatus').value = 'ALERTA';
+            applyFilters();
+            
+            // Scroll a la tabla
+            document.querySelector('.table-container').scrollIntoView({ behavior: 'smooth' });
+            
+            showToast('🔴 Mostrando solo OTs vencidas');
         }
 
         function parseCSV(text) {
@@ -866,14 +1176,7 @@
         }
 
         function updateFilters() {
-            const clientesIniciales = [...new Set(allData.map(r => r.clienteInicial))].filter(Boolean).sort();
-            const clientesFinales = [...new Set(allData.map(r => r.clienteFinal))].filter(Boolean).sort();
-            const noms = [...new Set(allData.flatMap(r => r.nom.split(',').map(n => n.trim())))].filter(Boolean).sort();
             const personal = [...new Set(allData.map(r => r.personal))].filter(Boolean).sort();
-
-            fillSelect('filter-cliente-inicial', clientesIniciales);
-            fillSelect('filter-cliente-final', clientesFinales);
-            fillSelect('filter-nom', noms);
             fillSelect('filter-personal', personal);
         }
 
@@ -892,17 +1195,17 @@
 
         function applyFilters() {
             const filterOT = document.getElementById('filter-ot').value.toLowerCase();
-            const filterClienteInicial = document.getElementById('filter-cliente-inicial').value;
-            const filterClienteFinal = document.getElementById('filter-cliente-final').value;
-            const filterNOM = document.getElementById('filter-nom').value;
+            const filterClienteInicial = document.getElementById('filter-cliente-inicial').value.toLowerCase();
+            const filterClienteFinal = document.getElementById('filter-cliente-final').value.toLowerCase();
+            const filterNOM = document.getElementById('filter-nom').value.toLowerCase();
             const filterPersonal = document.getElementById('filter-personal').value;
             const filterEstatus = document.getElementById('filter-estatus').value;
 
             filteredData = allData.filter(row => {
                 if (filterOT && !row.ot.toLowerCase().includes(filterOT)) return false;
-                if (filterClienteInicial && row.clienteInicial !== filterClienteInicial) return false;
-                if (filterClienteFinal && row.clienteFinal !== filterClienteFinal) return false;
-                if (filterNOM && !row.nom.includes(filterNOM)) return false;
+                if (filterClienteInicial && !row.clienteInicial.toLowerCase().includes(filterClienteInicial)) return false;
+                if (filterClienteFinal && !row.clienteFinal.toLowerCase().includes(filterClienteFinal)) return false;
+                if (filterNOM && !row.nom.toLowerCase().includes(filterNOM)) return false;
                 if (filterPersonal && row.personal !== filterPersonal) return false;
                 if (filterEstatus && getStatusCategory(row) !== filterEstatus) return false;
                 return true;
@@ -914,9 +1217,9 @@
         }
 
         document.getElementById('filter-ot').addEventListener('input', applyFilters);
-        document.getElementById('filter-cliente-inicial').addEventListener('change', applyFilters);
-        document.getElementById('filter-cliente-final').addEventListener('change', applyFilters);
-        document.getElementById('filter-nom').addEventListener('change', applyFilters);
+        document.getElementById('filter-cliente-inicial').addEventListener('input', applyFilters);
+        document.getElementById('filter-cliente-final').addEventListener('input', applyFilters);
+        document.getElementById('filter-nom').addEventListener('input', applyFilters);
         document.getElementById('filter-personal').addEventListener('change', applyFilters);
         document.getElementById('filter-estatus').addEventListener('change', applyFilters);
 
@@ -941,7 +1244,8 @@
                     labels: ['✅ Entregadas', '🟢 En tiempo', '🟠 En límite', '🔴 Alerta', '🟡 Pendiente'],
                     datasets: [{
                         data: [entregadas, tiempo, limite, alerta, pendiente],
-                        backgroundColor: ['#27ae60', '#2ecc71', '#f39c12', '#e74c3c', '#95a5a6']
+                        backgroundColor: ['#27ae60', '#2ecc71', '#f39c12', '#e74c3c', '#95a5a6'],
+                        borderWidth: 0
                     }]
                 },
                 options: {
@@ -950,7 +1254,11 @@
                     plugins: {
                         legend: { 
                             position: 'bottom',
-                            labels: { font: { size: 10 } }
+                            labels: { 
+                                font: { size: 9 },
+                                padding: 8,
+                                boxWidth: 12
+                            }
                         }
                     }
                 }
@@ -973,7 +1281,7 @@
                 const dateA = new Date(yearA, getMesIndex(mesA));
                 const dateB = new Date(yearB, getMesIndex(mesB));
                 return dateA - dateB;
-            });
+            }).slice(-8); // Solo últimos 8 meses
 
             if (charts.mes) charts.mes.destroy();
 
@@ -982,9 +1290,9 @@
                 data: {
                     labels: sortedMeses.map(([mes]) => mes),
                     datasets: [{
-                        label: 'OTs',
                         data: sortedMeses.map(([, count]) => count),
-                        backgroundColor: '#2d5f4f'
+                        backgroundColor: '#2d5f4f',
+                        borderRadius: 4
                     }]
                 },
                 options: {
@@ -996,10 +1304,19 @@
                     scales: {
                         y: { 
                             beginAtZero: true,
-                            ticks: { font: { size: 10 } }
+                            ticks: { 
+                                font: { size: 9 },
+                                stepSize: 5
+                            },
+                            grid: {
+                                display: false
+                            }
                         },
                         x: {
-                            ticks: { font: { size: 10 } }
+                            ticks: { font: { size: 9 } },
+                            grid: {
+                                display: false
+                            }
                         }
                     }
                 }
@@ -1020,7 +1337,7 @@
                 }))
                 .filter(d => d.dias !== null && d.dias >= 0)
                 .sort((a, b) => b.dias - a.dias)
-                .slice(0, 15);
+                .slice(0, 10); // Top 10
 
             if (charts.tiempos) charts.tiempos.destroy();
 
@@ -1029,9 +1346,9 @@
                 data: {
                     labels: otsConTiempos.map(d => d.ot),
                     datasets: [{
-                        label: 'Días',
                         data: otsConTiempos.map(d => d.dias),
-                        backgroundColor: '#3498db'
+                        backgroundColor: '#3498db',
+                        borderRadius: 4
                     }]
                 },
                 options: {
@@ -1044,10 +1361,12 @@
                     scales: {
                         x: { 
                             beginAtZero: true,
-                            ticks: { font: { size: 10 } }
+                            ticks: { font: { size: 9 } },
+                            grid: { display: false }
                         },
                         y: {
-                            ticks: { font: { size: 9 } }
+                            ticks: { font: { size: 8 } },
+                            grid: { display: false }
                         }
                     }
                 }
@@ -1058,45 +1377,66 @@
             const tbody = document.getElementById('tableBody');
             tbody.innerHTML = '';
 
-            filteredData.forEach(row => {
-                const tr = document.createElement('tr');
-                const dias = calcularDiasEntrega(row);
-                
-                tr.innerHTML = `
-                    <td><strong>${row.ot}</strong></td>
-                    <td>${row.referencia}</td>
-                    <td>${row.clienteInicial}</td>
-                    <td>${row.clienteFinal}</td>
-                    <td>${row.nom}</td>
-                    <td>${row.personal}</td>
-                    <td>${row.fechaVisita}</td>
-                    <td>${row.fechaDigital}</td>
-                    <td>${row.fechaFisico}</td>
-                    <td>${dias !== null ? dias : '-'}</td>
-                    <td>${row.estatusAuto}</td>
-                    <td>
-                        ${row.linkOT ? `
-                        <div class="table-action-btns">
-                            <button class="action-btn drive" onclick="openDriveOT('${row.linkOT}')">
-                                📁 Ver
-                            </button>
-                            <button class="action-btn whatsapp" onclick="shareWhatsAppOT('${escapeQuotes(row.ot)}', '${escapeQuotes(row.clienteFinal)}', '${row.linkOT}')">
-                                💬
-                            </button>
-                            <button class="action-btn email" onclick="shareEmailOT('${escapeQuotes(row.ot)}', '${escapeQuotes(row.clienteFinal)}', '${row.linkOT}')">
-                                ✉️
-                            </button>
-                            <button class="action-btn copy" onclick="copyLinkOT('${row.linkOT}')">
-                                📋
-                            </button>
-                        </div>
-                        ` : '<span style="color: #95a5a6; font-size: 0.75rem;">Sin link</span>'}
-                    </td>
-                `;
-                tbody.appendChild(tr);
+            // SEPARAR OTs ACTIVAS Y ENTREGADAS
+            const otsActivas = filteredData.filter(r => !r.entregadoManual.toUpperCase().includes('ENTREGADO'));
+            const otsEntregadas = filteredData.filter(r => r.entregadoManual.toUpperCase().includes('ENTREGADO'));
+
+            // RENDERIZAR OTs ACTIVAS
+            otsActivas.forEach(row => {
+                tbody.appendChild(createTableRow(row));
+            });
+
+            // SEPARADOR VISUAL
+            if (otsActivas.length > 0 && otsEntregadas.length > 0) {
+                const dividerRow = document.createElement('tr');
+                dividerRow.innerHTML = `<td colspan="12" class="table-section-divider">✅ Entregadas (${otsEntregadas.length})</td>`;
+                tbody.appendChild(dividerRow);
+            }
+
+            // RENDERIZAR OTs ENTREGADAS
+            otsEntregadas.forEach(row => {
+                tbody.appendChild(createTableRow(row));
             });
 
             document.getElementById('table-count').textContent = filteredData.length;
+        }
+
+        function createTableRow(row) {
+            const tr = document.createElement('tr');
+            const dias = calcularDiasEntrega(row);
+            
+            tr.innerHTML = `
+                <td><strong>${row.ot}</strong></td>
+                <td>${row.referencia}</td>
+                <td>${row.clienteInicial}</td>
+                <td>${row.clienteFinal}</td>
+                <td>${row.nom}</td>
+                <td>${row.personal}</td>
+                <td>${row.fechaVisita}</td>
+                <td>${row.fechaDigital}</td>
+                <td>${row.fechaFisico}</td>
+                <td>${dias !== null ? dias : '-'}</td>
+                <td>${row.estatusAuto}</td>
+                <td>
+                    ${row.linkOT ? `
+                    <div class="table-action-btns">
+                        <button class="action-btn drive" onclick="openDriveOT('${row.linkOT}')">
+                            📁 Ver
+                        </button>
+                        <button class="action-btn whatsapp" onclick="shareWhatsAppOT('${escapeQuotes(row.ot)}', '${escapeQuotes(row.clienteFinal)}', '${row.linkOT}')">
+                            💬
+                        </button>
+                        <button class="action-btn email" onclick="shareEmailOT('${escapeQuotes(row.ot)}', '${escapeQuotes(row.clienteFinal)}', '${row.linkOT}')">
+                            ✉️
+                        </button>
+                        <button class="action-btn copy" onclick="copyLinkOT('${row.linkOT}')">
+                            📋
+                        </button>
+                    </div>
+                    ` : '<span style="color: #95a5a6; font-size: 0.75rem;">Sin link</span>'}
+                </td>
+            `;
+            return tr;
         }
 
         let sortColumn = -1;
@@ -1216,16 +1556,15 @@
                 const csvText = await response.text();
                 const rows = parseCSV(csvText);
                 
-                // Mapear columnas según la estructura mostrada
                 allInformes = rows.slice(1).map(row => ({
-                    fecha: row[0] || '',           // A - Fecha
-                    empresa: row[1] || '',         // B - Empresa
-                    nom: row[2] || '',             // C - NOM
-                    persona: row[3] || '',         // D - Persona
-                    correo: row[4] || '',          // E - Correo
-                    link: row[5] || '',            // F - Link
-                    remitente: row[6] || '',       // G - Remitente
-                    rfc: row[7] || ''              // H - RFC
+                    fecha: row[0] || '',
+                    empresa: row[1] || '',
+                    nom: row[2] || '',
+                    persona: row[3] || '',
+                    correo: row[4] || '',
+                    link: row[5] || '',
+                    remitente: row[6] || '',
+                    rfc: row[7] || ''
                 })).filter(row => row.empresa && row.link);
 
                 filteredInformes = [...allInformes];
