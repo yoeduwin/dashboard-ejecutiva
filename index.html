@@ -1478,7 +1478,7 @@
         }
 
         // ==================== FUNCIONES PARA COMPARTIR OT ====================
-        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxlwQrZ-BOq4MmPTFxQofu5rx2b63pf1CODUuUxB_Qbb_f3pbmQRJpCXkAWVmR7f1bXug/exec';
+        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyng_ahYU4v4XgmMgG-J7xfZzgB1L0yC_yEQxoMjXK94qsh1BpdfhZApeo99YMB62BmqQ/exec';
 
         function compartirOT(ot, nom, fechaVisita, personal, clienteFinal) {
             const mensaje = `Estimado cliente,\n\nLa visita programada para ${nom} fue programada exitosamente para el día ${fechaVisita} y acudirá ${personal}.\n\nCliente: ${clienteFinal}\nOT: ${ot}\n\nSaludos cordiales,\nEjecutiva Ambiental\n☎️ 222-941-7295\n📧 eduwin.ejecutiva@gmail.com`;
@@ -1500,25 +1500,43 @@
                 console.log('Enviando petición para OT:', ot);
                 console.log('URL:', GOOGLE_SCRIPT_URL);
                 
-                const response = await fetch(GOOGLE_SCRIPT_URL, {
-                    method: 'POST',
-                    mode: 'no-cors',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ ot: ot })
+                // Construir URL con parámetros GET en lugar de POST
+                const url = `${GOOGLE_SCRIPT_URL}?ot=${encodeURIComponent(ot)}`;
+                console.log('URL completa:', url);
+                
+                const response = await fetch(url, {
+                    method: 'GET',
+                    redirect: 'follow'
                 });
 
-                console.log('Respuesta recibida:', response);
-
-                // Con mode: 'no-cors', no podemos leer la respuesta
-                // Asumimos que funcionó si no hubo error
-                showToast('✅ OT marcada como ENTREGADA correctamente', 3000);
+                console.log('Response status:', response.status);
+                console.log('Response OK:', response.ok);
                 
-                // Recargar datos después de 2 segundos
-                setTimeout(() => {
-                    loadData();
-                }, 2000);
+                const text = await response.text();
+                console.log('Response text:', text);
+                
+                let result;
+                try {
+                    result = JSON.parse(text);
+                } catch (e) {
+                    console.error('No se pudo parsear JSON:', e);
+                    throw new Error(`Respuesta inválida del servidor: ${text.substring(0, 100)}`);
+                }
+
+                console.log('Result:', result);
+
+                if (result.status === 'success') {
+                    showToast('✅ OT marcada como ENTREGADA correctamente', 3000);
+                    
+                    // Recargar datos después de 2 segundos
+                    setTimeout(() => {
+                        loadData();
+                    }, 2000);
+                } else {
+                    showToast(`❌ Error: ${result.message}`, 5000);
+                    console.error('Error del servidor:', result);
+                    alert(`Error del servidor:\n${result.message}`);
+                }
 
             } catch (error) {
                 console.error('Error completo:', error);
@@ -1526,10 +1544,9 @@
                 console.error('Mensaje:', error.message);
                 console.error('Stack:', error.stack);
                 
-                showToast(`❌ Error: ${error.message || 'No se pudo conectar con el servidor'}`, 5000);
+                showToast(`❌ Error: ${error.message}`, 5000);
                 
-                // Mostrar alerta adicional con más detalles
-                alert(`ERROR DETALLADO:\n\nTipo: ${error.name}\nMensaje: ${error.message}\n\nRevisa la consola (F12) para más información.`);
+                alert(`ERROR DETALLADO:\n\nTipo: ${error.name}\nMensaje: ${error.message}\n\nURL usada: ${GOOGLE_SCRIPT_URL}\n\nRevisa la consola (F12) para más información.`);
             }
         }
 
