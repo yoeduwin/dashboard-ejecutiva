@@ -846,9 +846,7 @@
                     </div>
                     <div class="filter-group">
                         <label>NOM</label>
-                        <select id="filter-informe-nom">
-                            <option value="">Todas las NOMs</option>
-                        </select>
+                        <input type="text" id="filter-informe-nom" placeholder="Buscar NOM...">
                     </div>
                     <div class="filter-group">
                         <label>RFC</label>
@@ -995,12 +993,14 @@
                 const item = document.createElement('div');
                 item.className = 'ot-vencida-item';
                 
-                const diasVencidos = calcularDiasVencimiento(ot);
+                // Extraer días vencidos del estatusAuto (ej: "🔴 Vencida [1 días]")
+                const diasMatch = ot.estatusAuto.match(/\[(\d+)\s+día/);
+                const diasTexto = diasMatch ? `${diasMatch[1]} día${diasMatch[1] !== '1' ? 's' : ''}` : 'Revisar';
                 
                 item.innerHTML = `
                     <div class="ot-vencida-header">
                         <span class="ot-vencida-numero">${ot.ot}</span>
-                        <span class="ot-vencida-dias">${diasVencidos > 0 ? `Vencida hace ${diasVencidos} días` : 'Vencida hoy'}</span>
+                        <span class="ot-vencida-dias">Vencida hace ${diasTexto}</span>
                     </div>
                     <div class="ot-vencida-info">
                         <strong>Cliente:</strong> ${ot.clienteFinal}
@@ -1048,19 +1048,6 @@
                     cerrarAlertaVencidas();
                 }
             });
-        }
-
-        function calcularDiasVencimiento(row) {
-            const fechaVisita = parseFecha(row.fechaVisita);
-            if (!fechaVisita) return 0;
-            
-            const hoy = new Date();
-            const diasLimite = 5; // Días límite para entrega
-            const fechaLimite = new Date(fechaVisita);
-            fechaLimite.setDate(fechaLimite.getDate() + diasLimite);
-            
-            const diasVencidos = Math.floor((hoy - fechaLimite) / (1000 * 60 * 60 * 24));
-            return diasVencidos > 0 ? diasVencidos : 0;
         }
 
         function cerrarAlertaVencidas() {
@@ -1404,6 +1391,7 @@
         function createTableRow(row) {
             const tr = document.createElement('tr');
             const dias = calcularDiasEntrega(row);
+            const isEntregado = row.entregadoManual.toUpperCase().includes('ENTREGADO');
             
             tr.innerHTML = `
                 <td><strong>${row.ot}</strong></td>
@@ -1418,22 +1406,18 @@
                 <td>${dias !== null ? dias : '-'}</td>
                 <td>${row.estatusAuto}</td>
                 <td>
-                    ${row.linkOT ? `
                     <div class="table-action-btns">
-                        <button class="action-btn drive" onclick="openDriveOT('${row.linkOT}')">
-                            📁 Ver
+                        <button class="action-btn whatsapp" onclick="compartirOT('${escapeQuotes(row.ot)}', '${escapeQuotes(row.nom)}', '${escapeQuotes(row.fechaVisita)}', '${escapeQuotes(row.personal)}', '${escapeQuotes(row.clienteFinal)}')">
+                            📤 Compartir
                         </button>
-                        <button class="action-btn whatsapp" onclick="shareWhatsAppOT('${escapeQuotes(row.ot)}', '${escapeQuotes(row.clienteFinal)}', '${row.linkOT}')">
-                            💬
+                        ${!isEntregado ? `
+                        <button class="action-btn drive" onclick="marcarEntregado('${escapeQuotes(row.ot)}')">
+                            ✅ Entregado
                         </button>
-                        <button class="action-btn email" onclick="shareEmailOT('${escapeQuotes(row.ot)}', '${escapeQuotes(row.clienteFinal)}', '${row.linkOT}')">
-                            ✉️
-                        </button>
-                        <button class="action-btn copy" onclick="copyLinkOT('${row.linkOT}')">
-                            📋
-                        </button>
+                        ` : `
+                        <span style="color: #27ae60; font-size: 0.75rem; font-weight: 600;">✅ Entregado</span>
+                        `}
                     </div>
-                    ` : '<span style="color: #95a5a6; font-size: 0.75rem;">Sin link</span>'}
                 </td>
             `;
             return tr;
@@ -1494,59 +1478,54 @@
         }
 
         // ==================== FUNCIONES PARA COMPARTIR OT ====================
-        function escapeQuotes(str) {
-            return str.replace(/'/g, "\\'").replace(/"/g, '\\"');
-        }
+        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyng_ahYU4v4XgmMgG-J7xfZzgB1L0yC_yEQxoMjXK94qsh1BpdfhZApeo99YMB62BmqQ/exec';
 
-        function openDriveOT(link) {
-            if (!link) {
-                showToast('⚠️ No hay link disponible');
-                return;
-            }
-            window.open(link, '_blank');
-        }
-
-        function shareWhatsAppOT(ot, cliente, link) {
-            if (!link) {
-                showToast('⚠️ No hay link disponible');
-                return;
-            }
+        function compartirOT(ot, nom, fechaVisita, personal, clienteFinal) {
+            const mensaje = `Estimado cliente,\n\nLa visita programada para ${nom} fue programada exitosamente para el día ${fechaVisita} y acudirá ${personal}.\n\nCliente: ${clienteFinal}\nOT: ${ot}\n\nSaludos cordiales,\nEjecutiva Ambiental\n☎️ 222-941-7295\nUna marca que te permite avanzar con tranquilidad`;
             
-            const mensaje = `📋 *ORDEN DE TRABAJO ${ot}*\n\n🏢 *Empresa:* ${cliente}\n\n📄 *Ver Orden de Trabajo:*\n${link}\n\n_Ejecutiva Ambiental_\n☎️ 222-941-7295`;
             const url = `https://wa.me/?text=${encodeURIComponent(mensaje)}`;
             window.open(url, '_blank');
         }
 
-        function shareEmailOT(ot, cliente, link) {
-            if (!link) {
-                showToast('⚠️ No hay link disponible');
+        async function marcarEntregado(ot) {
+            // Confirmar con el usuario
+            if (!confirm(`¿Confirma que la Orden de Trabajo ${ot} ha sido entregada?`)) {
                 return;
             }
-            
-            const subject = `Orden de Trabajo ${ot} - ${cliente} - Ejecutiva Ambiental`;
-            const body = `Estimado cliente,\n\nLe compartimos la Orden de Trabajo ${ot} para su revisión y seguimiento.\n\n🏢 INFORMACIÓN DEL SERVICIO:\n• Empresa: ${cliente}\n• Orden: ${ot}\n\n📄 VER ORDEN DE TRABAJO:\n${link}\n\n📋 INSTRUCCIONES:\n1. Haga clic en el link para ver la OT en Google Drive\n2. Revise los servicios programados\n3. Confirme fechas y horarios disponibles\n\n📞 CONTACTO:\nPara cualquier duda o aclaración:\nTel: 222-941-7295\nEmail: eduwin.ejecutiva@gmail.com\n\nSaludos cordiales,\nEJECUTIVA AMBIENTAL\nSeguridad e Higiene | Capacitación | Mantenimiento Industrial`;
-            
-            const mailto = `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-            window.location.href = mailto;
+
+            // Mostrar mensaje de carga
+            showToast('⏳ Actualizando estado...');
+
+            try {
+                const response = await fetch(GOOGLE_SCRIPT_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ ot: ot })
+                });
+
+                const result = await response.json();
+
+                if (result.status === 'success') {
+                    showToast('✅ OT marcada como ENTREGADA correctamente');
+                    
+                    // Recargar datos después de 1 segundo
+                    setTimeout(() => {
+                        loadData();
+                    }, 1000);
+                } else {
+                    showToast(`❌ Error: ${result.message}`);
+                    console.error('Error del servidor:', result);
+                }
+            } catch (error) {
+                showToast('❌ Error al conectar con el servidor');
+                console.error('Error:', error);
+            }
         }
 
-        function copyLinkOT(link) {
-            if (!link) {
-                showToast('⚠️ No hay link disponible');
-                return;
-            }
-            
-            navigator.clipboard.writeText(link).then(() => {
-                showToast('✅ Link copiado al portapapeles');
-            }).catch(() => {
-                const textarea = document.createElement('textarea');
-                textarea.value = link;
-                document.body.appendChild(textarea);
-                textarea.select();
-                document.execCommand('copy');
-                document.body.removeChild(textarea);
-                showToast('✅ Link copiado al portapapeles');
-            });
+        function escapeQuotes(str) {
+            return str.replace(/'/g, "\\'").replace(/"/g, '\\"');
         }
 
         // ==================== INFORMES (TAB 2) ====================
@@ -1585,28 +1564,20 @@
         }
 
         function updateInformesFilters() {
-            const noms = [...new Set(allInformes.map(i => i.nom))].filter(Boolean).sort();
-            
-            const select = document.getElementById('filter-informe-nom');
-            select.innerHTML = '<option value="">Todas las NOMs</option>';
-            noms.forEach(nom => {
-                const option = document.createElement('option');
-                option.value = nom;
-                option.textContent = nom;
-                select.appendChild(option);
-            });
+            // Ya no necesitamos poblar el select de NOMs porque ahora es un input
+            // Los inputs de texto funcionan directamente con el filtro
         }
 
         function applyInformesFilters() {
             const filterEmpresa = document.getElementById('filter-informe-empresa').value.toLowerCase();
             const filterFecha = document.getElementById('filter-informe-fecha').value;
-            const filterNOM = document.getElementById('filter-informe-nom').value;
+            const filterNOM = document.getElementById('filter-informe-nom').value.toLowerCase();
             const filterRFC = document.getElementById('filter-informe-rfc').value.toLowerCase();
 
             filteredInformes = allInformes.filter(informe => {
                 if (filterEmpresa && !informe.empresa.toLowerCase().includes(filterEmpresa)) return false;
                 if (filterFecha && !informe.fecha.includes(filterFecha.split('-').reverse().join('/'))) return false;
-                if (filterNOM && informe.nom !== filterNOM) return false;
+                if (filterNOM && !informe.nom.toLowerCase().includes(filterNOM)) return false;
                 if (filterRFC && !informe.rfc.toLowerCase().includes(filterRFC)) return false;
                 return true;
             });
@@ -1616,7 +1587,7 @@
 
         document.getElementById('filter-informe-empresa').addEventListener('input', applyInformesFilters);
         document.getElementById('filter-informe-fecha').addEventListener('change', applyInformesFilters);
-        document.getElementById('filter-informe-nom').addEventListener('change', applyInformesFilters);
+        document.getElementById('filter-informe-nom').addEventListener('input', applyInformesFilters);
         document.getElementById('filter-informe-rfc').addEventListener('input', applyInformesFilters);
 
         function renderInformes() {
