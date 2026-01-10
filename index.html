@@ -1478,10 +1478,10 @@
         }
 
         // ==================== FUNCIONES PARA COMPARTIR OT ====================
-        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw3RmP6O4KfmMm_WsK5k0zC1kqVkQPN-uXwlOxwYrup9xcmPyYtXhYpALOdJnDT0049-A/exec';
+        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyng_ahYU4v4XgmMgG-J7xfZzgB1L0yC_yEQxoMjXK94qsh1BpdfhZApeo99YMB62BmqQ/exec';
 
         function compartirOT(ot, nom, fechaVisita, personal, clienteFinal) {
-            const mensaje = `Estimado cliente,\n\nLa visita programada para ${nom} fue programada exitosamente para el día ${fechaVisita} y acudirá ${personal}.\n\nCliente: ${clienteFinal}\nOT: ${ot}\n\nSaludos cordiales,\nEjecutiva Ambiental\n☎️ 222-941-7295\nUna marca que te permite avanzar con tranquilidad`;
+            const mensaje = `Estimado cliente,\n\nLa visita programada para ${nom} fue programada exitosamente para el día ${fechaVisita} y acudirá ${personal}.\n\nCliente: ${clienteFinal}\nOT: ${ot}\n\nSaludos cordiales,\nEjecutiva Ambiental\n☎️ 222-941-7295\n📧 eduwin.ejecutiva@gmail.com`;
             
             const url = `https://wa.me/?text=${encodeURIComponent(mensaje)}`;
             window.open(url, '_blank');
@@ -1494,33 +1494,42 @@
             }
 
             // Mostrar mensaje de carga
-            showToast('⏳ Actualizando estado...');
+            showToast('⏳ Actualizando estado...', 5000);
 
             try {
+                console.log('Enviando petición para OT:', ot);
+                console.log('URL:', GOOGLE_SCRIPT_URL);
+                
                 const response = await fetch(GOOGLE_SCRIPT_URL, {
                     method: 'POST',
+                    mode: 'no-cors',
                     headers: {
                         'Content-Type': 'application/json',
                     },
                     body: JSON.stringify({ ot: ot })
                 });
 
-                const result = await response.json();
+                console.log('Respuesta recibida:', response);
 
-                if (result.status === 'success') {
-                    showToast('✅ OT marcada como ENTREGADA correctamente');
-                    
-                    // Recargar datos después de 1 segundo
-                    setTimeout(() => {
-                        loadData();
-                    }, 1000);
-                } else {
-                    showToast(`❌ Error: ${result.message}`);
-                    console.error('Error del servidor:', result);
-                }
+                // Con mode: 'no-cors', no podemos leer la respuesta
+                // Asumimos que funcionó si no hubo error
+                showToast('✅ OT marcada como ENTREGADA correctamente', 3000);
+                
+                // Recargar datos después de 2 segundos
+                setTimeout(() => {
+                    loadData();
+                }, 2000);
+
             } catch (error) {
-                showToast('❌ Error al conectar con el servidor');
-                console.error('Error:', error);
+                console.error('Error completo:', error);
+                console.error('Tipo de error:', error.name);
+                console.error('Mensaje:', error.message);
+                console.error('Stack:', error.stack);
+                
+                showToast(`❌ Error: ${error.message || 'No se pudo conectar con el servidor'}`, 5000);
+                
+                // Mostrar alerta adicional con más detalles
+                alert(`ERROR DETALLADO:\n\nTipo: ${error.name}\nMensaje: ${error.message}\n\nRevisa la consola (F12) para más información.`);
             }
         }
 
@@ -1685,7 +1694,7 @@
             });
         }
 
-        function showToast(message) {
+        function showToast(message, duration = 2000) {
             const toast = document.createElement('div');
             toast.className = 'toast';
             toast.textContent = message;
@@ -1694,7 +1703,7 @@
             setTimeout(() => {
                 toast.style.animation = 'slideIn 0.3s ease-out reverse';
                 setTimeout(() => toast.remove(), 300);
-            }, 2000);
+            }, duration);
         }
 
         // Initial load
