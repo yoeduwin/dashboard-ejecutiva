@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Panel de Control - Ejecutiva Ambiental</title>
+    <!-- FullCalendar CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.css" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -671,6 +673,68 @@
         .modal-btn-secondary:hover {
             background: #7f8c8d;
         }
+
+        /* CALENDARIO STYLES */
+        .calendar-legend {
+            display: flex;
+            gap: 2rem;
+            margin-top: 1rem;
+            padding: 1rem;
+            background: #f8f9fa;
+            border-radius: 6px;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.85rem;
+            color: #2c3e50;
+        }
+
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 4px;
+            border: 2px solid rgba(0,0,0,0.1);
+        }
+
+        #calendar {
+            padding: 1.5rem;
+            background: white;
+        }
+
+        /* FullCalendar overrides */
+        .fc {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        }
+
+        .fc-toolbar-title {
+            font-size: 1.3rem !important;
+            color: #2d5f4f;
+            font-weight: 600;
+        }
+
+        .fc-button-primary {
+            background: #2d5f4f !important;
+            border-color: #2d5f4f !important;
+        }
+
+        .fc-button-primary:hover {
+            background: #3d7f6a !important;
+            border-color: #3d7f6a !important;
+        }
+
+        .fc-event {
+            cursor: pointer;
+            border: none;
+            font-size: 0.75rem;
+        }
+
+        .fc-daygrid-event {
+            padding: 2px 4px;
+            margin: 1px;
+        }
     </style>
 </head>
 <body>
@@ -693,6 +757,9 @@
             </div>
             <div class="tab" onclick="switchTab('informes')">
                 📄 Informes
+            </div>
+            <div class="tab" onclick="switchTab('calendario')">
+                📅 Calendario
             </div>
         </div>
     </div>
@@ -870,16 +937,44 @@
         </div>
     </div>
 
+    <!-- TAB 3: CALENDARIO -->
+    <div id="tab-calendario" class="tab-content">
+        <div class="container">
+            <!-- Controles del Calendario -->
+            <div class="filters">
+                <h3>📅 Vista de Calendario</h3>
+                <div class="calendar-legend">
+                    <div class="legend-item">
+                        <span class="legend-color" style="background: #3498db;"></span>
+                        <span>Fecha Visita</span>
+                    </div>
+                    <div class="legend-item">
+                        <span class="legend-color" style="background: #27ae60;"></span>
+                        <span>Fecha Entrega Digital</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Calendario -->
+            <div class="table-container" style="margin-top: 1.5rem;">
+                <div id="calendar"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- FullCalendar JS -->
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <script>
         const CSV_URL_ORDENES = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTl2L2xQjqks4NnlPYq5VqvVt1EXcrP8I3qujcAXtsWeZKJsNb6j2prwu6lW5zGLm5Gj-O3AG5aOReZ/pub?output=csv&gid=0';
         const CSV_URL_INFORMES = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTl2L2xQjqks4NnlPYq5VqvVt1EXcrP8I3qujcAXtsWeZKJsNb6j2prwu6lW5zGLm5Gj-O3AG5aOReZ/pub?output=csv&gid=808750033';
-        
+
         let allData = [];
         let filteredData = [];
         let allInformes = [];
         let filteredInformes = [];
         let charts = {};
+        let calendar = null;
 
         // ==================== TAB SWITCHING ====================
         function switchTab(tabName) {
@@ -894,6 +989,15 @@
             // Load data if needed
             if (tabName === 'informes' && allInformes.length === 0) {
                 loadInformes();
+            }
+
+            // Load calendar if needed
+            if (tabName === 'calendario') {
+                if (!calendar) {
+                    initCalendar();
+                } else {
+                    loadCalendarEvents();
+                }
             }
         }
 
@@ -1716,11 +1820,111 @@
             toast.className = 'toast';
             toast.textContent = message;
             document.body.appendChild(toast);
-            
+
             setTimeout(() => {
                 toast.style.animation = 'slideIn 0.3s ease-out reverse';
                 setTimeout(() => toast.remove(), 300);
             }, duration);
+        }
+
+        // ==================== CALENDARIO (TAB 3) ====================
+        function initCalendar() {
+            const calendarEl = document.getElementById('calendar');
+
+            calendar = new FullCalendar.Calendar(calendarEl, {
+                initialView: 'dayGridMonth',
+                locale: 'es',
+                headerToolbar: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'dayGridMonth,dayGridWeek,listWeek'
+                },
+                buttonText: {
+                    today: 'Hoy',
+                    month: 'Mes',
+                    week: 'Semana',
+                    list: 'Lista'
+                },
+                height: 'auto',
+                eventClick: function(info) {
+                    const event = info.event;
+                    const details = event.extendedProps;
+
+                    let message = `📋 OT: ${details.ot}\n`;
+                    message += `👤 Cliente: ${details.cliente}\n`;
+                    message += `📄 NOM: ${details.nom}\n`;
+                    message += `👨‍💼 Personal: ${details.personal}\n`;
+                    message += `📅 Tipo: ${event.title}\n`;
+                    message += `🗓️ Fecha: ${details.fecha}`;
+
+                    alert(message);
+                },
+                eventDidMount: function(info) {
+                    info.el.title = `OT: ${info.event.extendedProps.ot} - ${info.event.extendedProps.cliente}`;
+                }
+            });
+
+            calendar.render();
+            loadCalendarEvents();
+        }
+
+        function loadCalendarEvents() {
+            if (!calendar) return;
+
+            // Limpiar eventos existentes
+            calendar.removeAllEvents();
+
+            const events = [];
+
+            // Procesar datos de órdenes de trabajo
+            allData.forEach(row => {
+                // Evento de Fecha Visita
+                if (row.fechaVisita) {
+                    const fechaVisita = parseFecha(row.fechaVisita);
+                    if (fechaVisita) {
+                        events.push({
+                            title: `🔵 Visita: ${row.ot}`,
+                            start: fechaVisita,
+                            backgroundColor: '#3498db',
+                            borderColor: '#3498db',
+                            extendedProps: {
+                                ot: row.ot,
+                                cliente: row.clienteFinal,
+                                nom: row.nom,
+                                personal: row.personal,
+                                fecha: row.fechaVisita,
+                                tipo: 'Visita'
+                            }
+                        });
+                    }
+                }
+
+                // Evento de Fecha Entrega Digital
+                if (row.fechaDigital) {
+                    const fechaDigital = parseFecha(row.fechaDigital);
+                    if (fechaDigital) {
+                        events.push({
+                            title: `🟢 Digital: ${row.ot}`,
+                            start: fechaDigital,
+                            backgroundColor: '#27ae60',
+                            borderColor: '#27ae60',
+                            extendedProps: {
+                                ot: row.ot,
+                                cliente: row.clienteFinal,
+                                nom: row.nom,
+                                personal: row.personal,
+                                fecha: row.fechaDigital,
+                                tipo: 'Entrega Digital'
+                            }
+                        });
+                    }
+                }
+            });
+
+            // Agregar eventos al calendario
+            events.forEach(event => calendar.addEvent(event));
+
+            showToast(`📅 ${events.length} eventos cargados en el calendario`, 2000);
         }
 
         // Initial load
