@@ -675,65 +675,306 @@
         }
 
         /* CALENDARIO STYLES */
-        .calendar-legend {
-            display: flex;
-            gap: 2rem;
-            margin-top: 1rem;
-            padding: 1rem;
-            background: #f8f9fa;
-            border-radius: 6px;
+        /* Panel de control del calendario */
+        .calendar-controls {
+            background: linear-gradient(135deg, #2d5f4f 0%, #3d7f6a 100%);
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin-bottom: 1.5rem;
+            color: white;
+            box-shadow: 0 4px 12px rgba(45,95,79,0.2);
         }
 
-        .legend-item {
+        .controls-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .controls-title {
+            font-size: 1.3rem;
+            font-weight: 700;
             display: flex;
             align-items: center;
             gap: 0.5rem;
-            font-size: 0.85rem;
-            color: #2c3e50;
         }
 
-        .legend-color {
-            width: 20px;
-            height: 20px;
-            border-radius: 4px;
-            border: 2px solid rgba(0,0,0,0.1);
+        .calendar-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .stat-card {
+            background: rgba(255,255,255,0.15);
+            padding: 1rem;
+            border-radius: 8px;
+            backdrop-filter: blur(10px);
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .stat-card:hover {
+            background: rgba(255,255,255,0.25);
+            transform: translateY(-2px);
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.3rem;
+        }
+
+        .stat-label {
+            font-size: 0.75rem;
+            opacity: 0.9;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* Leyenda mejorada */
+        .calendar-legend-improved {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .legend-item-improved {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            padding: 1rem;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            transition: all 0.3s;
+        }
+
+        .legend-item-improved:hover {
+            box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+            transform: translateY(-2px);
+        }
+
+        .legend-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            flex-shrink: 0;
+        }
+
+        .legend-info {
+            flex: 1;
+        }
+
+        .legend-title {
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 0.3rem;
+            font-size: 0.95rem;
+        }
+
+        .legend-count {
+            font-size: 0.8rem;
+            color: #7f8c8d;
+        }
+
+        /* Filtros del calendario */
+        .calendar-filters {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .filters-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .filters-title {
+            font-size: 1rem;
+            font-weight: 700;
+            color: #2d5f4f;
+        }
+
+        .filters-clear {
+            background: none;
+            border: 1px solid #e0e0e0;
+            color: #7f8c8d;
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.3s;
+        }
+
+        .filters-clear:hover {
+            background: #f8f9fa;
+            border-color: #2d5f4f;
+            color: #2d5f4f;
+        }
+
+        .filters-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .filter-item {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            padding: 0.8rem;
+            background: #f8f9fa;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            user-select: none;
+        }
+
+        .filter-item:hover {
+            background: #ecf0f1;
+        }
+
+        .filter-checkbox {
+            width: 22px;
+            height: 22px;
+            border-radius: 6px;
+            border: 2px solid #ddd;
+            cursor: pointer;
+            position: relative;
+            transition: all 0.3s;
+            flex-shrink: 0;
+        }
+
+        .filter-checkbox.checked {
+            background: linear-gradient(135deg, #2d5f4f, #3d7f6a);
+            border-color: #2d5f4f;
+        }
+
+        .filter-checkbox.checked::after {
+            content: '✓';
+            color: white;
+            font-weight: bold;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 0.9rem;
+        }
+
+        .filter-label {
+            font-size: 0.9rem;
+            color: #2c3e50;
+            font-weight: 500;
         }
 
         #calendar {
             padding: 1.5rem;
             background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
         }
 
-        /* FullCalendar overrides */
+        /* FullCalendar overrides mejorados */
         .fc {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
         }
 
         .fc-toolbar-title {
-            font-size: 1.3rem !important;
+            font-size: 1.5rem !important;
             color: #2d5f4f;
-            font-weight: 600;
+            font-weight: 700;
         }
 
         .fc-button-primary {
-            background: #2d5f4f !important;
-            border-color: #2d5f4f !important;
+            background: linear-gradient(135deg, #2d5f4f, #3d7f6a) !important;
+            border: none !important;
+            border-radius: 8px;
+            padding: 0.6rem 1.2rem;
+            font-weight: 600;
+            box-shadow: 0 2px 8px rgba(45,95,79,0.3);
+            transition: all 0.3s;
         }
 
         .fc-button-primary:hover {
-            background: #3d7f6a !important;
-            border-color: #3d7f6a !important;
+            background: linear-gradient(135deg, #3d7f6a, #4d8f7a) !important;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(45,95,79,0.4);
+        }
+
+        .fc-button-primary:active,
+        .fc-button-active {
+            background: #2d5f4f !important;
+            box-shadow: 0 2px 4px rgba(45,95,79,0.3) !important;
+        }
+
+        .fc-day-today {
+            background: rgba(45,95,79,0.08) !important;
+        }
+
+        .fc-daygrid-day-number {
+            font-weight: 600;
+            color: #2c3e50;
+            padding: 0.5rem;
         }
 
         .fc-event {
             cursor: pointer;
             border: none;
             font-size: 0.75rem;
+            border-radius: 6px;
+            padding: 4px 8px;
+            margin: 2px;
+            font-weight: 500;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            transition: all 0.2s;
+        }
+
+        .fc-event:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+            z-index: 10;
         }
 
         .fc-daygrid-event {
-            padding: 2px 4px;
-            margin: 1px;
+            padding: 4px 8px;
+            margin: 2px;
+        }
+
+        /* Colores específicos para tipos de eventos */
+        .fc-event.event-visita {
+            background: linear-gradient(135deg, #3498db, #2980b9) !important;
+            border-left: 4px solid #2471a3 !important;
+        }
+
+        .fc-event.event-digital {
+            background: linear-gradient(135deg, #27ae60, #229954) !important;
+            border-left: 4px solid #1e8449 !important;
+        }
+
+        @media (max-width: 768px) {
+            .calendar-stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .calendar-legend-improved {
+                grid-template-columns: 1fr;
+            }
+
+            .filters-grid {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
@@ -940,23 +1181,76 @@
     <!-- TAB 3: CALENDARIO -->
     <div id="tab-calendario" class="tab-content">
         <div class="container">
-            <!-- Controles del Calendario -->
-            <div class="filters">
-                <h3>📅 Vista de Calendario</h3>
-                <div class="calendar-legend">
-                    <div class="legend-item">
-                        <span class="legend-color" style="background: #3498db;"></span>
-                        <span>Fecha Visita</span>
+            <!-- Panel de Control -->
+            <div class="calendar-controls">
+                <div class="controls-header">
+                    <div class="controls-title">
+                        📅 Vista de Calendario
                     </div>
-                    <div class="legend-item">
-                        <span class="legend-color" style="background: #27ae60;"></span>
-                        <span>Fecha Entrega Digital</span>
+                </div>
+                <!-- Estadísticas -->
+                <div class="calendar-stats">
+                    <div class="stat-card">
+                        <div class="stat-value" id="cal-stat-visitas">0</div>
+                        <div class="stat-label">Visitas</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="cal-stat-digital">0</div>
+                        <div class="stat-label">Entregas</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="cal-stat-pendientes">0</div>
+                        <div class="stat-label">Pendientes</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="cal-stat-total">0</div>
+                        <div class="stat-label">Total</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Leyenda Mejorada -->
+            <div class="calendar-legend-improved">
+                <div class="legend-item-improved">
+                    <div class="legend-icon" style="background: linear-gradient(135deg, #3498db, #2980b9);">
+                        📍
+                    </div>
+                    <div class="legend-info">
+                        <div class="legend-title">Visitas Programadas</div>
+                        <div class="legend-count"><span id="legend-visitas-count">0</span> eventos este mes</div>
+                    </div>
+                </div>
+                <div class="legend-item-improved">
+                    <div class="legend-icon" style="background: linear-gradient(135deg, #27ae60, #229954);">
+                        ✅
+                    </div>
+                    <div class="legend-info">
+                        <div class="legend-title">Entregas Digitales</div>
+                        <div class="legend-count"><span id="legend-digital-count">0</span> eventos este mes</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Filtros Interactivos -->
+            <div class="calendar-filters">
+                <div class="filters-header">
+                    <div class="filters-title">🔍 Filtrar Eventos</div>
+                    <button class="filters-clear" onclick="clearCalendarFilters()">Limpiar filtros</button>
+                </div>
+                <div class="filters-grid">
+                    <div class="filter-item" onclick="toggleCalendarFilter('visita')">
+                        <div class="filter-checkbox checked" id="filter-visita"></div>
+                        <div class="filter-label">📍 Visitas Programadas</div>
+                    </div>
+                    <div class="filter-item" onclick="toggleCalendarFilter('digital')">
+                        <div class="filter-checkbox checked" id="filter-digital"></div>
+                        <div class="filter-label">✅ Entregas Digitales</div>
                     </div>
                 </div>
             </div>
 
             <!-- Calendario -->
-            <div class="table-container" style="margin-top: 1.5rem;">
+            <div class="table-container" style="margin-top: 0;">
                 <div id="calendar"></div>
             </div>
         </div>
@@ -975,6 +1269,10 @@
         let filteredInformes = [];
         let charts = {};
         let calendar = null;
+        let calendarFilters = {
+            visita: true,
+            digital: true
+        };
 
         // ==================== TAB SWITCHING ====================
         function switchTab(tabName) {
@@ -1861,6 +2159,10 @@
                 },
                 eventDidMount: function(info) {
                     info.el.title = `OT: ${info.event.extendedProps.ot} - ${info.event.extendedProps.cliente}`;
+                },
+                datesSet: function(info) {
+                    // Actualizar contadores cuando cambia la vista o el mes
+                    loadCalendarEvents();
                 }
             });
 
@@ -1875,18 +2177,38 @@
             calendar.removeAllEvents();
 
             const events = [];
+            let visitasCount = 0;
+            let digitalCount = 0;
+            let pendientesCount = 0;
+
+            // Obtener mes/año actual del calendario
+            const currentDate = calendar.getDate();
+            const currentMonth = currentDate.getMonth();
+            const currentYear = currentDate.getFullYear();
+
+            // Contadores para el mes visible
+            let visitasMesActual = 0;
+            let digitalMesActual = 0;
 
             // Procesar datos de órdenes de trabajo
             allData.forEach(row => {
                 // Evento de Fecha Visita
-                if (row.fechaVisita) {
+                if (row.fechaVisita && calendarFilters.visita) {
                     const fechaVisita = parseFecha(row.fechaVisita);
                     if (fechaVisita) {
+                        visitasCount++;
+
+                        // Contar si está en el mes actual
+                        if (fechaVisita.getMonth() === currentMonth && fechaVisita.getFullYear() === currentYear) {
+                            visitasMesActual++;
+                        }
+
                         events.push({
                             title: `🔵 Visita: ${row.ot}`,
                             start: fechaVisita,
                             backgroundColor: '#3498db',
                             borderColor: '#3498db',
+                            className: 'event-visita',
                             extendedProps: {
                                 ot: row.ot,
                                 cliente: row.clienteFinal,
@@ -1900,14 +2222,22 @@
                 }
 
                 // Evento de Fecha Entrega Digital
-                if (row.fechaDigital) {
+                if (row.fechaDigital && calendarFilters.digital) {
                     const fechaDigital = parseFecha(row.fechaDigital);
                     if (fechaDigital) {
+                        digitalCount++;
+
+                        // Contar si está en el mes actual
+                        if (fechaDigital.getMonth() === currentMonth && fechaDigital.getFullYear() === currentYear) {
+                            digitalMesActual++;
+                        }
+
                         events.push({
                             title: `🟢 Digital: ${row.ot}`,
                             start: fechaDigital,
                             backgroundColor: '#27ae60',
                             borderColor: '#27ae60',
+                            className: 'event-digital',
                             extendedProps: {
                                 ot: row.ot,
                                 cliente: row.clienteFinal,
@@ -1919,12 +2249,56 @@
                         });
                     }
                 }
+
+                // Contar pendientes (sin fecha digital)
+                if (!row.fechaDigital && row.fechaVisita) {
+                    pendientesCount++;
+                }
             });
 
             // Agregar eventos al calendario
             events.forEach(event => calendar.addEvent(event));
 
+            // Actualizar estadísticas
+            document.getElementById('cal-stat-visitas').textContent = visitasCount;
+            document.getElementById('cal-stat-digital').textContent = digitalCount;
+            document.getElementById('cal-stat-pendientes').textContent = pendientesCount;
+            document.getElementById('cal-stat-total').textContent = visitasCount + digitalCount;
+
+            // Actualizar contadores de leyenda (mes actual)
+            document.getElementById('legend-visitas-count').textContent = visitasMesActual;
+            document.getElementById('legend-digital-count').textContent = digitalMesActual;
+
             showToast(`📅 ${events.length} eventos cargados en el calendario`, 2000);
+        }
+
+        // ==================== FILTROS DEL CALENDARIO ====================
+        function toggleCalendarFilter(tipo) {
+            calendarFilters[tipo] = !calendarFilters[tipo];
+
+            // Actualizar checkbox visual
+            const checkbox = document.getElementById(`filter-${tipo}`);
+            if (calendarFilters[tipo]) {
+                checkbox.classList.add('checked');
+            } else {
+                checkbox.classList.remove('checked');
+            }
+
+            // Recargar eventos
+            loadCalendarEvents();
+        }
+
+        function clearCalendarFilters() {
+            calendarFilters.visita = true;
+            calendarFilters.digital = true;
+
+            // Actualizar todos los checkboxes
+            document.getElementById('filter-visita').classList.add('checked');
+            document.getElementById('filter-digital').classList.add('checked');
+
+            // Recargar eventos
+            loadCalendarEvents();
+            showToast('✅ Filtros limpiados', 2000);
         }
 
         // Initial load
