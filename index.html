@@ -1183,28 +1183,19 @@
         <div class="container">
             <!-- Panel de Control -->
             <div class="calendar-controls">
-                <div class="controls-header">
-                    <div class="controls-title">
-                        📅 Vista de Calendario
-                    </div>
-                </div>
                 <!-- Estadísticas -->
                 <div class="calendar-stats">
                     <div class="stat-card">
                         <div class="stat-value" id="cal-stat-visitas">0</div>
-                        <div class="stat-label">Visitas</div>
                     </div>
                     <div class="stat-card">
                         <div class="stat-value" id="cal-stat-digital">0</div>
-                        <div class="stat-label">Entregas</div>
                     </div>
                     <div class="stat-card">
                         <div class="stat-value" id="cal-stat-pendientes">0</div>
-                        <div class="stat-label">Pendientes</div>
                     </div>
                     <div class="stat-card">
                         <div class="stat-value" id="cal-stat-total">0</div>
-                        <div class="stat-label">Total</div>
                     </div>
                 </div>
             </div>
@@ -1225,7 +1216,7 @@
                         ✅
                     </div>
                     <div class="legend-info">
-                        <div class="legend-title">Entregas Digitales</div>
+                        <div class="legend-title">Entregas Programadas</div>
                         <div class="legend-count"><span id="legend-digital-count">0</span> eventos este mes</div>
                     </div>
                 </div>
@@ -1244,7 +1235,7 @@
                     </div>
                     <div class="filter-item" onclick="toggleCalendarFilter('digital')">
                         <div class="filter-checkbox checked" id="filter-digital"></div>
-                        <div class="filter-label">✅ Entregas Digitales</div>
+                        <div class="filter-label">✅ Entregas Programadas</div>
                     </div>
                 </div>
             </div>
@@ -2233,7 +2224,7 @@
                         }
 
                         events.push({
-                            title: `🟢 Digital: ${row.ot}`,
+                            title: `🟢 Entrega: ${row.ot}`,
                             start: fechaDigital,
                             backgroundColor: '#27ae60',
                             borderColor: '#27ae60',
@@ -2244,7 +2235,7 @@
                                 nom: row.nom,
                                 personal: row.personal,
                                 fecha: row.fechaDigital,
-                                tipo: 'Entrega Digital'
+                                tipo: 'Entrega Programada'
                             }
                         });
                     }
