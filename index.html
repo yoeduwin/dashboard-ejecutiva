@@ -963,6 +963,16 @@
             border-left: 4px solid #1e8449 !important;
         }
 
+        /* Reducir tamaño de letra en eventos */
+        .fc-event-title {
+            font-size: 0.75rem !important;
+            font-weight: 500;
+        }
+
+        .fc-daygrid-event-dot {
+            display: none !important;
+        }
+
         @media (max-width: 768px) {
             .calendar-stats {
                 grid-template-columns: repeat(2, 1fr);
@@ -2116,6 +2126,7 @@
                     list: 'Lista'
                 },
                 height: 'auto',
+                displayEventTime: false,
                 eventClick: function(info) {
                     const event = info.event;
                     const details = event.extendedProps;
@@ -2176,7 +2187,7 @@
                         }
 
                         events.push({
-                            title: `🔵 Visita: ${row.ot}`,
+                            title: `VISITA - ${row.ot} - (${row.nom})`,
                             start: fechaVisita,
                             backgroundColor: '#3498db',
                             borderColor: '#3498db',
@@ -2205,7 +2216,7 @@
                         }
 
                         events.push({
-                            title: `🟢 Entrega: ${row.ot}`,
+                            title: `ENTREGA - ${row.ot} - (${row.nom})`,
                             start: fechaDigital,
                             backgroundColor: '#27ae60',
                             borderColor: '#27ae60',
