@@ -674,6 +674,92 @@
             background: #7f8c8d;
         }
 
+        /* MODAL DE DETALLE DE EVENTO */
+        .evento-modal-content {
+            max-width: 450px;
+        }
+
+        .evento-modal-header {
+            background: linear-gradient(135deg, #2d5f4f 0%, #3d7f6a 100%);
+            color: white;
+            padding: 1.2rem 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .evento-modal-header h3 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .evento-detalle-body {
+            padding: 1.5rem;
+        }
+
+        .evento-info-item {
+            display: flex;
+            align-items: flex-start;
+            padding: 0.6rem 0;
+            border-bottom: 1px solid #ecf0f1;
+        }
+
+        .evento-info-item:last-child {
+            border-bottom: none;
+        }
+
+        .evento-info-icon {
+            width: 24px;
+            margin-right: 0.8rem;
+            font-size: 1rem;
+        }
+
+        .evento-info-label {
+            font-weight: 600;
+            color: #2c3e50;
+            min-width: 70px;
+        }
+
+        .evento-info-value {
+            color: #555;
+            flex: 1;
+            word-break: break-word;
+        }
+
+        .evento-modal-footer {
+            padding: 1rem 1.5rem;
+            border-top: 1px solid #ecf0f1;
+            display: flex;
+            justify-content: space-between;
+            gap: 0.8rem;
+        }
+
+        .modal-btn-copy {
+            background: #3498db;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .modal-btn-copy:hover {
+            background: #2980b9;
+        }
+
+        .modal-btn-copy.copied {
+            background: #27ae60;
+        }
+
+        .modal-btn-close {
+            background: #95a5a6;
+            color: white;
+        }
+
+        .modal-btn-close:hover {
+            background: #7f8c8d;
+        }
+
         /* CALENDARIO STYLES */
         /* Panel de control del calendario */
         .calendar-controls {
@@ -1464,6 +1550,114 @@
             showToast('🔴 Mostrando solo OTs vencidas');
         }
 
+        function mostrarDetalleEvento(details, title) {
+            // Crear overlay
+            const overlay = document.createElement('div');
+            overlay.className = 'modal-overlay';
+            overlay.id = 'eventoModal';
+
+            // Texto para copiar (sin emojis para formato limpio)
+            const textoParaCopiar = `OT: ${details.ot}
+Cliente: ${details.cliente}
+NOM: ${details.nom}
+Personal: ${details.personal}
+Tipo: ${title}
+Fecha: ${details.fecha}`;
+
+            overlay.innerHTML = `
+                <div class="modal-content evento-modal-content">
+                    <div class="evento-modal-header">
+                        <span style="font-size: 1.3rem;">📅</span>
+                        <h3>Detalle del Evento</h3>
+                    </div>
+                    <div class="evento-detalle-body">
+                        <div class="evento-info-item">
+                            <span class="evento-info-icon">📋</span>
+                            <span class="evento-info-label">OT:</span>
+                            <span class="evento-info-value">${details.ot}</span>
+                        </div>
+                        <div class="evento-info-item">
+                            <span class="evento-info-icon">👤</span>
+                            <span class="evento-info-label">Cliente:</span>
+                            <span class="evento-info-value">${details.cliente}</span>
+                        </div>
+                        <div class="evento-info-item">
+                            <span class="evento-info-icon">📄</span>
+                            <span class="evento-info-label">NOM:</span>
+                            <span class="evento-info-value">${details.nom}</span>
+                        </div>
+                        <div class="evento-info-item">
+                            <span class="evento-info-icon">👨‍💼</span>
+                            <span class="evento-info-label">Personal:</span>
+                            <span class="evento-info-value">${details.personal}</span>
+                        </div>
+                        <div class="evento-info-item">
+                            <span class="evento-info-icon">📅</span>
+                            <span class="evento-info-label">Tipo:</span>
+                            <span class="evento-info-value">${title}</span>
+                        </div>
+                        <div class="evento-info-item">
+                            <span class="evento-info-icon">🗓️</span>
+                            <span class="evento-info-label">Fecha:</span>
+                            <span class="evento-info-value">${details.fecha}</span>
+                        </div>
+                    </div>
+                    <div class="evento-modal-footer">
+                        <button class="modal-btn modal-btn-copy" onclick="copiarDetalleEvento(this, '${textoParaCopiar.replace(/'/g, "\\'")}')">
+                            <span>📋</span> Copiar
+                        </button>
+                        <button class="modal-btn modal-btn-close" onclick="cerrarEventoModal()">Cerrar</button>
+                    </div>
+                </div>
+            `;
+
+            document.body.appendChild(overlay);
+
+            // Cerrar al hacer click fuera del modal
+            overlay.addEventListener('click', function(e) {
+                if (e.target === overlay) {
+                    cerrarEventoModal();
+                }
+            });
+        }
+
+        function copiarDetalleEvento(btn, texto) {
+            // Decodificar el texto (reemplazar saltos de línea)
+            const textoLimpio = texto.replace(/\\n/g, '\n');
+
+            navigator.clipboard.writeText(textoLimpio).then(() => {
+                btn.innerHTML = '<span>✓</span> Copiado';
+                btn.classList.add('copied');
+                setTimeout(() => {
+                    btn.innerHTML = '<span>📋</span> Copiar';
+                    btn.classList.remove('copied');
+                }, 2000);
+            }).catch(err => {
+                // Fallback para navegadores que no soportan clipboard API
+                const textarea = document.createElement('textarea');
+                textarea.value = textoLimpio;
+                document.body.appendChild(textarea);
+                textarea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textarea);
+
+                btn.innerHTML = '<span>✓</span> Copiado';
+                btn.classList.add('copied');
+                setTimeout(() => {
+                    btn.innerHTML = '<span>📋</span> Copiar';
+                    btn.classList.remove('copied');
+                }, 2000);
+            });
+        }
+
+        function cerrarEventoModal() {
+            const modal = document.getElementById('eventoModal');
+            if (modal) {
+                modal.style.animation = 'fadeIn 0.3s ease-out reverse';
+                setTimeout(() => modal.remove(), 300);
+            }
+        }
+
         function parseCSV(text) {
             const rows = [];
             let currentRow = [];
@@ -2139,15 +2333,7 @@
                 eventClick: function(info) {
                     const event = info.event;
                     const details = event.extendedProps;
-
-                    let message = `📋 OT: ${details.ot}\n`;
-                    message += `👤 Cliente: ${details.cliente}\n`;
-                    message += `📄 NOM: ${details.nom}\n`;
-                    message += `👨‍💼 Personal: ${details.personal}\n`;
-                    message += `📅 Tipo: ${event.title}\n`;
-                    message += `🗓️ Fecha: ${details.fecha}`;
-
-                    alert(message);
+                    mostrarDetalleEvento(details, event.title);
                 },
                 eventDidMount: function(info) {
                     info.el.title = `OT: ${info.event.extendedProps.ot} - ${info.event.extendedProps.cliente}`;
