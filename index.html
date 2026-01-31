@@ -1550,19 +1550,17 @@
             showToast('🔴 Mostrando solo OTs vencidas');
         }
 
+        // Variable global para almacenar el texto a copiar del evento actual
+        let textoEventoActual = '';
+
         function mostrarDetalleEvento(details, title) {
             // Crear overlay
             const overlay = document.createElement('div');
             overlay.className = 'modal-overlay';
             overlay.id = 'eventoModal';
 
-            // Texto para copiar (sin emojis para formato limpio)
-            const textoParaCopiar = `OT: ${details.ot}
-Cliente: ${details.cliente}
-NOM: ${details.nom}
-Personal: ${details.personal}
-Tipo: ${title}
-Fecha: ${details.fecha}`;
+            // Guardar texto para copiar en variable global
+            textoEventoActual = `OT: ${details.ot}\nCliente: ${details.cliente}\nNOM: ${details.nom}\nPersonal: ${details.personal}\nTipo: ${title}\nFecha: ${details.fecha}`;
 
             overlay.innerHTML = `
                 <div class="modal-content evento-modal-content">
@@ -1603,7 +1601,7 @@ Fecha: ${details.fecha}`;
                         </div>
                     </div>
                     <div class="evento-modal-footer">
-                        <button class="modal-btn modal-btn-copy" onclick="copiarDetalleEvento(this, '${textoParaCopiar.replace(/'/g, "\\'")}')">
+                        <button class="modal-btn modal-btn-copy" id="btnCopiarEvento">
                             <span>📋</span> Copiar
                         </button>
                         <button class="modal-btn modal-btn-close" onclick="cerrarEventoModal()">Cerrar</button>
@@ -1613,6 +1611,9 @@ Fecha: ${details.fecha}`;
 
             document.body.appendChild(overlay);
 
+            // Agregar evento al botón copiar
+            document.getElementById('btnCopiarEvento').addEventListener('click', copiarDetalleEvento);
+
             // Cerrar al hacer click fuera del modal
             overlay.addEventListener('click', function(e) {
                 if (e.target === overlay) {
@@ -1621,21 +1622,22 @@ Fecha: ${details.fecha}`;
             });
         }
 
-        function copiarDetalleEvento(btn, texto) {
-            // Decodificar el texto (reemplazar saltos de línea)
-            const textoLimpio = texto.replace(/\\n/g, '\n');
+        function copiarDetalleEvento() {
+            const btn = document.getElementById('btnCopiarEvento');
 
-            navigator.clipboard.writeText(textoLimpio).then(() => {
+            navigator.clipboard.writeText(textoEventoActual).then(() => {
                 btn.innerHTML = '<span>✓</span> Copiado';
                 btn.classList.add('copied');
                 setTimeout(() => {
                     btn.innerHTML = '<span>📋</span> Copiar';
                     btn.classList.remove('copied');
                 }, 2000);
-            }).catch(err => {
+            }).catch(() => {
                 // Fallback para navegadores que no soportan clipboard API
                 const textarea = document.createElement('textarea');
-                textarea.value = textoLimpio;
+                textarea.value = textoEventoActual;
+                textarea.style.position = 'fixed';
+                textarea.style.opacity = '0';
                 document.body.appendChild(textarea);
                 textarea.select();
                 document.execCommand('copy');
